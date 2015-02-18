@@ -26,11 +26,18 @@ public:
     ~MidiComposer();
 
 public:
+    void initTracks();
     int writeFile();
+    void setTrackInstrument(int,int);
+    void pushNote(int note, int track, int duration);
+    void pushSilence(int track,int duration);
 
 private :
-    MIDIMultiTrack m_tracks;
+    MIDITimedBigMessage m_message;
+    MIDIMultiTrack *m_tracks;
     int m_tracksCount = 2;
+    MIDIClockTime m_time;
+    MIDIClockTime m_dt;
 };
 
 #endif // MIDICOMPOSER_H
