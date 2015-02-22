@@ -4,6 +4,9 @@
 #include <QMainWindow>
 #include <QPushButton>
 
+#include "midicomposer.h"
+#include "audioanalyser.h"
+
 namespace Ui {
 class MainWindow;
 }
@@ -15,6 +18,12 @@ class MainWindow : public QMainWindow
     public:
         explicit MainWindow(QWidget *parent = 0);
         ~MainWindow();
+    public slots:
+        void playMidi();
+        void analyseSound();
+
+    private :
+        AudioAnalyser * audioAnalyser;
 
 };
 

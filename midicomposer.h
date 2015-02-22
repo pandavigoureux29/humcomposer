@@ -33,7 +33,7 @@ public:
     void pushSilence(int track,int duration);
 
 private :
-    MIDITimedBigMessage m_message;
+    MIDITimedBigMessage *m_message;
     MIDIMultiTrack *m_tracks;
     int m_tracksCount = 2;
     MIDIClockTime m_time;
