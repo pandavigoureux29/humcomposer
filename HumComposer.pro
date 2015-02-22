@@ -80,7 +80,8 @@ SOURCES += \
     aubio/lvec.c \
     aubio/mathutils.c \
     aubio/vecutils.c \
-    audioanalyser.cpp
+    audioanalyser.cpp \
+    notedata.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -165,7 +166,8 @@ HEADERS += \
     aubio/musicutils.h \
     aubio/types.h \
     aubio/vecutils.h \
-    audioanalyser.h
+    audioanalyser.h \
+    notedata.h
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 
