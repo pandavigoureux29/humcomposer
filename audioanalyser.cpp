@@ -10,7 +10,7 @@ AudioAnalyser::AudioAnalyser()
     m_hopSize = m_winSize / 4; // hop size
     m_samplerate = 44100; // samplerate
 
-    m_noiseThreshold = 30;
+    m_noiseThreshold = 50;
     m_minBestNoteCount = 10;
 
     //create pitch object
@@ -20,9 +20,10 @@ AudioAnalyser::AudioAnalyser()
 
 }
 
-std::vector<NoteData> * AudioAnalyser::loadSound(){
+std::vector<NoteData> * AudioAnalyser::loadSound(std::string _filePath){
     QDir dir;
-    std::string path = dir.currentPath().toStdString()+"/la_bis.wav";
+    std::string path = dir.currentPath().toStdString()+"/"+_filePath;
+    qDebug() << path.c_str();
 
     bool res = false;
     try{
@@ -100,6 +101,7 @@ void AudioAnalyser::findNotes(const short int * _audio){
 
             //compute average db level of the sample
             smpl_t db = aubio_level_detection(input,0);
+            //qDebug() << db << "  " << index;
 
             //if the value of db is high enough
             if( db > m_noiseThreshold){
@@ -201,10 +203,11 @@ int AudioAnalyser::findBestNote(std::map<std::string,int> * _map){
     std::string noteS = "-1";
     std::map<std::string,int>::iterator it;
     for( it = _map->begin(); it != _map->end(); it++){
+        //qDebug() << "note : " << it->first.c_str() << " count : " << it->second;
         if( it->second > maxNoteCount && it->second >= m_minBestNoteCount ){
             maxNoteCount = it->second;
             noteS = it->first;
-            //qDebug() << "note : " << it->first.c_str() << " count : " << it->second;
+            qDebug() << "note : " << it->first.c_str() << " count : " << it->second;
         }
     }
     return atoi(noteS.c_str());

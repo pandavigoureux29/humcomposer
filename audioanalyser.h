@@ -17,7 +17,7 @@ class AudioAnalyser
 public:
     AudioAnalyser();
     ~AudioAnalyser();
-    std::vector<NoteData> * loadSound();
+    std::vector<NoteData> * loadSound(std::string name);
     int getTotalSize();
 
 private:

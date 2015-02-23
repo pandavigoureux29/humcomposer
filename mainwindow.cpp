@@ -18,7 +18,7 @@ void MainWindow::playMidi(){
 }
 
 void MainWindow::analyseSound(){
-    std::vector< NoteData > * vecNotes = m_audioAnalyser->loadSound();
+    std::vector< NoteData > * vecNotes = m_audioAnalyser->loadSound("sound.wav");
     m_midiComposer->buildMidiFromData(vecNotes,m_audioAnalyser->getTotalSize());
 }
 
