@@ -5,6 +5,7 @@
 #include <windows.h>
 #endif
 
+//JDKS
 #include "jdksmidi/world.h"
 #include "jdksmidi/track.h"
 #include "jdksmidi/multitrack.h"
@@ -12,6 +13,9 @@
 #include "jdksmidi/fileread.h"
 #include "jdksmidi/fileshow.h"
 #include "jdksmidi/filewritemultitrack.h"
+
+#include "notedata.h"
+
 using namespace jdksmidi;
 
 #include <iostream>
@@ -27,10 +31,11 @@ public:
 
 public:
     void initTracks();
-    int writeFile();
+    int writeFile(std::string filePath);
     void setTrackInstrument(int,int);
-    void pushNote(int note, int track, int duration);
+    void pushNote(int note, int track, int durationMs);
     void pushSilence(int track,int duration);
+    void buildMidiFromData(std::vector<NoteData> * _notesData, int _totalAudioSize);
 
 private :
     MIDITimedBigMessage *m_message;

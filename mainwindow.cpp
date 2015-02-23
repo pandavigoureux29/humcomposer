@@ -3,18 +3,12 @@
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
-    //MainFrame *mainFrame = new MainFrame(this);
-    //this->setCentralWidget(mainFrame);
+    m_midiComposer = new MidiComposer();
 
-    MidiComposer * midiComposer = new MidiComposer();
+    m_audioAnalyser = new AudioAnalyser();
 
-    audioAnalyser = new AudioAnalyser();
-
-    /*QPushButton * playButton = new QPushButton("Play",this);
-    QObject::connect(playButton, SIGNAL(clicked()), this, SLOT(playMidi())) ;*/
-
-    QPushButton * analButton = new QPushButton("Analyse",this);
-    QObject::connect(analButton, SIGNAL(clicked()), this, SLOT(analyseSound())) ;
+    ActionButtonsFrame * abFrame = new ActionButtonsFrame(this);
+    this->setCentralWidget(abFrame);
 
     this->adjustSize();
 }
@@ -24,7 +18,8 @@ void MainWindow::playMidi(){
 }
 
 void MainWindow::analyseSound(){
-    audioAnalyser->loadSound();
+    std::vector< NoteData > * vecNotes = m_audioAnalyser->loadSound();
+    m_midiComposer->buildMidiFromData(vecNotes,m_audioAnalyser->getTotalSize());
 }
 
 MainWindow::~MainWindow()

@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QPushButton>
+#include "actionbuttonsframe.h"
 
 #include "midicomposer.h"
 #include "audioanalyser.h"
@@ -23,7 +23,8 @@ class MainWindow : public QMainWindow
         void analyseSound();
 
     private :
-        AudioAnalyser * audioAnalyser;
+        AudioAnalyser * m_audioAnalyser;
+        MidiComposer * m_midiComposer;
 
 };
 

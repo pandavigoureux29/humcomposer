@@ -81,7 +81,8 @@ SOURCES += \
     aubio/mathutils.c \
     aubio/vecutils.c \
     audioanalyser.cpp \
-    notedata.cpp
+    notedata.cpp \
+    actionbuttonsframe.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -167,7 +168,8 @@ HEADERS += \
     aubio/types.h \
     aubio/vecutils.h \
     audioanalyser.h \
-    notedata.h
+    notedata.h \
+    actionbuttonsframe.h
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 

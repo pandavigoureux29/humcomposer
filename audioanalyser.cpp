@@ -10,18 +10,19 @@ AudioAnalyser::AudioAnalyser()
     m_hopSize = m_winSize / 4; // hop size
     m_samplerate = 44100; // samplerate
 
-    m_noiseTreshold = 30;
+    m_noiseThreshold = 30;
+    m_minBestNoteCount = 10;
 
     //create pitch object
     m_aubioPitchObject = new_aubio_pitch ("fcomb", m_winSize, m_hopSize, m_samplerate);
     //Create tss object
-    m_aubioTssObject = new_aubio_tss(m_winSize,m_hopSize);
+    //m_aubioTssObject = new_aubio_tss(m_winSize,m_hopSize);
 
 }
 
-void AudioAnalyser::loadSound(){
+std::vector<NoteData> * AudioAnalyser::loadSound(){
     QDir dir;
-    std::string path = dir.currentPath().toStdString()+"/la.wav";
+    std::string path = dir.currentPath().toStdString()+"/la_bis.wav";
 
     bool res = false;
     try{
@@ -39,21 +40,22 @@ void AudioAnalyser::loadSound(){
     }else{
         qDebug() << "Failed To Load File";
     }
+    return m_notes;
 }
 
 void AudioAnalyser::processSound(){
 
     //Go through the entire audio and process sample frames
     const short int* samples = m_sndBuffer->getSamples();
-    int totalSize = m_sndBuffer->getSampleCount();
+    m_totalSize = m_sndBuffer->getSampleCount();
 
-    findNotes(samples,totalSize);
+    findNotes(samples);
 }
 
 /**
  * Process the window frame a find the note
  */
-int AudioAnalyser::computeNote(fvec_t * _frameSample, int _count){
+int AudioAnalyser::computeNote(fvec_t * _frameSample){
 
     fvec_t *out = new_fvec (1); // output candidates
 
@@ -65,13 +67,13 @@ int AudioAnalyser::computeNote(fvec_t * _frameSample, int _count){
         pitch = pitch / 100;
     int note = log( pitch/440.0)/log(2) * 12 + 69;
 
-    qDebug() << "pitch " << pitch << "; note " << note;
+    //qDebug() << "pitch " << pitch << "; note " << note;
 
     del_fvec(out);
     return note;
 }
 
-void AudioAnalyser::findNotes(const short int * _audio,int _length){
+void AudioAnalyser::findNotes(const short int * _audio){
 
     m_notes = new std::vector<NoteData>();
     // create a vector to hold each frame sample of m_hopSize length
@@ -87,57 +89,55 @@ void AudioAnalyser::findNotes(const short int * _audio,int _length){
 
 
     //go through every audio value
-    while(index < _length ){
+    while(index < m_totalSize ){
         curSampleCount++;
         index++;
         //store a frame of m_hopSize length as input
         input->data[curSampleCount] = *(_audio + index);
         //when we have filled the input data
-        if( curSampleCount >= m_hopSize ){
+        if( curSampleCount >= (int) m_hopSize ){
             curSampleCount =0;
 
             //compute average db level of the sample
             smpl_t db = aubio_level_detection(input,0);
 
             //if the value of db is high enough
-            if( db > m_noiseTreshold){
+            if( db > m_noiseThreshold){
                 //compute note for this frame sample
-                int newNote = computeNote(input,m_hopSize);
+                int newNote = computeNote(input);
 
                 //qDebug() << "db " << db << " at " << (index-m_hopSize) ;
                 //here we have a potential note
-                //if a note has already began
+                //if a note has already began ( no silence )
                 if( curNote->begin >=0 ){
-                    //do nothing
-                //if this is a new note
-                }else{
-                    //store the last one
-                    //HERE TO DO
+                    //check if the note hasn't changed
+                    //1.if(note has changed){
+                    //2.store currentNote
+                    //3.begin a new one
 
+                //if this is a new note after a silence
+                }else{
                     //Begin new note
                     curNote->begin = index;
                     curNote->note = newNote;
+                    notesBufferCount->clear();
                 }
 
+                //note count for this frame
                 std::string noteS = std::to_string(newNote);
                 if( (*notesBufferCount)[noteS] == 0)
                     (*notesBufferCount)[noteS] = 1;
                 else
                     (*notesBufferCount)[noteS]++;
+
             //if this is the end of an note ( = new silence as though a note was playing )
             }else {
                 //end of a note
                 if(curNote->begin >=0){
                     qDebug() << "END NOTE";
                     curNote->end = index;
-                    int bestNote = findMaxCountNote(notesBufferCount);
-                    //build new note
-                    NoteData * newNoteData = new NoteData();
-                    newNoteData->begin = curNote->begin;
-                    newNoteData->end = curNote->end;
-                    newNoteData->note = bestNote;
-                    m_notes->push_back(*newNoteData);
-                    qDebug() << "note " << newNoteData->note;
+                    //build new note a store it
+                    storeNote(curNote,notesBufferCount);
                     //reset curNote
                     curNote->begin = -1;
                 }
@@ -149,15 +149,42 @@ void AudioAnalyser::findNotes(const short int * _audio,int _length){
     del_fvec(input);
 }
 
+//Store new note in the array ( a copy of the node is made )
+void AudioAnalyser::storeNote(NoteData * _inputNote, std::map<std::string,int> * _notesBufferCount ){
+    //we have stored notes values found by pitch,
+    //now we want the best one ( most found )
+    int bestNote = findBestNote(_notesBufferCount);
+    if( bestNote < 0 ){
+        return;
+    }
+
+    NoteData * newNoteData = new NoteData();
+    //sample rate for time calculation
+    newNoteData->setSampleRate(m_samplerate);
+    //note frame
+    newNoteData->begin = _inputNote->begin;
+    newNoteData->end = _inputNote->end;
+    newNoteData->note = bestNote;
+    m_notes->push_back(*newNoteData);
+
+    qDebug() << "note " << newNoteData->begin << " " << newNoteData->end <<" " << newNoteData->note;
+
+    _notesBufferCount->clear();
+}
+
+int AudioAnalyser::getTotalSize(){
+    return m_totalSize;
+}
+
 AudioAnalyser::~AudioAnalyser()
 {
     del_aubio_pitch( m_aubioPitchObject);
-    del_aubio_tss(m_aubioTssObject);
+    //del_aubio_tss(m_aubioTssObject);
 }
 
 //=========== UTILS ====================
 
-
+// Put _input values in _output
 void AudioAnalyser::fillInputData( short int * _input, fvec_t * _output, int _count){
     int i = 0;
     short int temp;
@@ -168,15 +195,16 @@ void AudioAnalyser::fillInputData( short int * _input, fvec_t * _output, int _co
     }
 }
 
-int AudioAnalyser::findMaxCountNote(std::map<std::string,int> * _map){
+// Find best note within the ones stored for the current frame ( with max count )
+int AudioAnalyser::findBestNote(std::map<std::string,int> * _map){
     int maxNoteCount = 0;
     std::string noteS = "-1";
     std::map<std::string,int>::iterator it;
     for( it = _map->begin(); it != _map->end(); it++){
-        if( it->second > maxNoteCount ){
+        if( it->second > maxNoteCount && it->second >= m_minBestNoteCount ){
             maxNoteCount = it->second;
             noteS = it->first;
-            qDebug() << "note : " << it->first.c_str() << " count : " << it->second;
+            //qDebug() << "note : " << it->first.c_str() << " count : " << it->second;
         }
     }
     return atoi(noteS.c_str());

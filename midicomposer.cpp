@@ -5,19 +5,19 @@ MidiComposer::MidiComposer()
     m_message = new MIDITimedBigMessage(); // the object for individual midi events
 
     m_time = MIDIClockTime(); // time in midi ticks
-    initTracks();
+    /*initTracks();
     setTrackInstrument(1,29);
-    pushNote(40,1,100);
-    pushNote(46,1,100);
+    pushNote(40,1,1000);
+    pushSilence(1,1000);
+    pushNote(46,1,1000);
 
-    writeFile();
+    writeFile("caca.mid");*/
 
 }
 
 void MidiComposer::initTracks(){
 
     m_time = 0;
-    MIDIClockTime dt = 100; // time interval (1 second)
     int clks_per_beat = 100; // number of ticks in crotchet (1...32767)
     m_tracksCount = 2; // tracks 0 and 1
 
@@ -65,7 +65,7 @@ void MidiComposer::pushNote(int _note,int _track, int _duration){
     // after note(s) on before note(s) off: add words to music in the present situation
     m_tracks->GetTrack( _track )->PutTextEvent(m_time, META_LYRIC_TEXT, "note"+_note);
 
-    m_dt = _duration;
+    m_dt = _duration / 10;// 100 MIDIClk = 1sec, so 1000ms/10 = 1sec
     m_time += m_dt;
     //Stops the note
     m_message->SetTime( m_time );
@@ -82,7 +82,7 @@ void MidiComposer::pushSilence(int _track,int _duration){
     // after note(s) on before note(s) off: add words to music in the present situation
     m_tracks->GetTrack( _track )->PutTextEvent(m_time, META_LYRIC_TEXT, "silence"+_duration);
 
-    m_dt = _duration;
+    m_dt = _duration / 10;
     m_time += m_dt;
     //Stops the note
     m_message->SetTime( m_time );
@@ -90,15 +90,14 @@ void MidiComposer::pushSilence(int _track,int _duration){
     m_tracks->GetTrack( _track )->PutEvent( *m_message );
 }
 
-int MidiComposer::writeFile(){
+int MidiComposer::writeFile(std::string _filePath){
 
     int return_code = 0;
     // to write the multi track object out, we need to create an output stream for the output filename
-    const char *outfile_name = "debug_midifile.mid";
+    const char *outfile_name = _filePath.c_str();
     MIDIFileWriteStreamFileName out_stream( outfile_name );
 
     // then output the stream like my example does, except setting m_tracksCount to match your data
-
     if( out_stream.IsValid() )
     {
         // the object which takes the midi tracks and writes the midifile to the output stream
@@ -121,6 +120,38 @@ int MidiComposer::writeFile(){
     }
 
     //return return_code;
+}
+
+
+void MidiComposer::buildMidiFromData(std::vector<NoteData> * _notesData, int _totalAudioSize){
+    qDebug() << "BUILDING";
+    initTracks();
+    NoteData * note;
+    int time = 0;
+    for( int i=0; i < _notesData->size(); i++){
+        note = &_notesData->at(i);
+        //if the next note begins after a delay from the current time
+        if( note->begin > time){
+            //add silence
+            float silenceDuration = (note->begin - time); //duration in sample count
+            silenceDuration = ((float)silenceDuration/ (float)note->getSampleRate()) * 1000; // duration in ms
+            pushSilence(1,(int)silenceDuration);
+            qDebug() << "silence dur: " << silenceDuration << " " << note->begin ;
+        }
+        //Add note
+        pushNote(note->note,1,note->duration());
+        time = note->end;
+        qDebug() << "add " << note->note << " dur: " << note->duration();
+    }
+    //we have processed all notes, if the total size isn't reached, add silence
+    if( time < _totalAudioSize){
+        //add silence
+        float silenceDuration = (_totalAudioSize - time); //duration in sample count
+        silenceDuration = ((float)silenceDuration/ (float)note->getSampleRate()) * 1000; // duration in ms
+        pushSilence(1,(int)silenceDuration);
+        qDebug() << "silence dur: " << silenceDuration ;
+    }
+    writeFile("compo.mid");
 }
 
 MidiComposer::~MidiComposer()

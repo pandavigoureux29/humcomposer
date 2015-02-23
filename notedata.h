@@ -1,5 +1,6 @@
 #ifndef NOTEDATA
 #define NOTEDATA
+#include <QDebug>
 
 class NoteData{
 public:
@@ -10,8 +11,20 @@ public:
     int end;
     int note;
 
+    /**
+     * Return length of the note in sample count
+     */
     int length();
-    float duration(int sampleRate);
+    /**
+     * Return duration of the note in ms
+    */
+    float duration();
+
+    void setSampleRate(int _sampleRate);
+    int getSampleRate();
+
+private:
+    int m_sampleRate;
 };
 
 #endif // NOTEDATA
