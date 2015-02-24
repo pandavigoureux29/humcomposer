@@ -5,13 +5,6 @@ MidiComposer::MidiComposer()
     m_message = new MIDITimedBigMessage(); // the object for individual midi events
 
     m_time = MIDIClockTime(); // time in midi ticks
-    /*initTracks();
-    setTrackInstrument(1,29);
-    pushNote(40,1,1000);
-    pushSilence(1,1000);
-    pushNote(46,1,1000);
-
-    writeFile("caca.mid");*/
 
 }
 

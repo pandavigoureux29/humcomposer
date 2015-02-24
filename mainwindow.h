@@ -2,10 +2,18 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "actionbuttonsframe.h"
+#include <QDebug>
+#include <QVBoxLayout>
 
+//ui
+#include "ui/uitrackframe.h"
+
+//data manager
 #include "midicomposer.h"
 #include "audioanalyser.h"
+
+#include <SFML/Audio.hpp>
+#include "notedata.h"
 
 namespace Ui {
 class MainWindow;
@@ -22,9 +30,14 @@ class MainWindow : public QMainWindow
         void playMidi();
         void analyseSound();
 
+    public :
+        //callbacks
+        void onRecordedFinished(int track, sf::SoundBuffer recorderBuffer);
+
     private :
         AudioAnalyser * m_audioAnalyser;
         MidiComposer * m_midiComposer;
+        std::vector<UITrackFrame> * m_tracks;
 
 };
 

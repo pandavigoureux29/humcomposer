@@ -82,7 +82,11 @@ SOURCES += \
     aubio/vecutils.c \
     audioanalyser.cpp \
     notedata.cpp \
-    actionbuttonsframe.cpp
+    actionbuttonsframe.cpp \
+    ui/uirecorder.cpp \
+    ui/uitrackactionpanel.cpp \
+    ui/uitrackframe.cpp \
+    ui/uitrackmidipanel.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -169,7 +173,11 @@ HEADERS += \
     aubio/vecutils.h \
     audioanalyser.h \
     notedata.h \
-    actionbuttonsframe.h
+    actionbuttonsframe.h \
+    ui/uirecorder.h \
+    ui/uitrackactionpanel.h \
+    ui/uitrackframe.h \
+    ui/uitrackmidipanel.h
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 
