@@ -10,18 +10,24 @@
 #include <QPushButton>
 #include <QHBoxLayout>
 
+#include <SFML/Audio.hpp>
+
 #include "ui/uirecorder.h"
 
 class UITrackActionPanel: public QFrame{
-    //Q_OBJECT
+    Q_OBJECT
 
     public:
         UITrackActionPanel(QWidget *parent = 0);
         ~UITrackActionPanel();
 
+    public slots:
+        void record();
+        void stop();
+
     private:
-        UIRecorder * m_uiRecorder;
         QLabel * m_title;
+        sf::SoundBufferRecorder * m_sfRecorder;
 };
 
 #endif // UITRACKACTIONPANEL_H

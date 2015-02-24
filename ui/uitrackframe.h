@@ -12,10 +12,14 @@
 #include "uitrackmidipanel.h"
 
 class UITrackFrame : public QFrame {
+    Q_OBJECT
 
     public:
         UITrackFrame(QWidget * parent = 0);
         ~UITrackFrame();
+
+    public slots:
+        void playMidi();
 
     private:
         UITrackActionPanel * m_uiTAP;

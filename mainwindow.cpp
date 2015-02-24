@@ -7,8 +7,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     m_audioAnalyser = new AudioAnalyser();
 
-    //ActionButtonsFrame * abFrame = new ActionButtonsFrame(this);
-
+    //MAin widget holding tracks & audioRecorder
+    QWidget * mainWidget = new QWidget();
+    QVBoxLayout * mainLayout = new QVBoxLayout();
     //TRACKS
     QWidget * tracksPanel = new QWidget();
     QVBoxLayout * m_tracksLayout = new QVBoxLayout();
@@ -18,8 +19,15 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     tracksPanel->setLayout(m_tracksLayout);
 
+    mainLayout->addWidget(tracksPanel);
+
+    //Audio Recorder (frame at bottom)
+    UIRecorder * m_uiRecorder = new UIRecorder();
+    mainLayout->addWidget(m_uiRecorder);
+
     //Set Central Widget
-    this->setCentralWidget(tracksPanel);
+    mainWidget->setLayout(mainLayout);
+    this->setCentralWidget(mainWidget);
     this->adjustSize();
 }
 

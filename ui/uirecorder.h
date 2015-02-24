@@ -4,11 +4,17 @@
 #include <SFML/Audio.hpp>
 #include <QHBoxLayout>
 #include <QDebug>
+#include <QFrame>
 
 #include <QPushButton>
 #include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QLabel>
 
-class UIRecorder: public QWidget{
+#include "audioanalyser.h"
+//#include "mainwindow.h"
+
+class UIRecorder: public QFrame{
 
     Q_OBJECT
 
@@ -17,11 +23,19 @@ class UIRecorder: public QWidget{
         ~UIRecorder();
 
     public slots:
+        void play();
         void record();
         void stop();
 
     private :
+
+        //MainWindow * m_mainWindow;
+
         sf::SoundBufferRecorder * m_sfRecorder;
+        sf::Sound * m_sfSound;
+
+        AudioAnalyser * m_analyser;
+
 };
 
 #endif // UIRECORDER_H

@@ -7,6 +7,7 @@
 
 //ui
 #include "ui/uitrackframe.h"
+#include "ui/uirecorder.h"
 
 //data manager
 #include "midicomposer.h"
@@ -37,6 +38,7 @@ class MainWindow : public QMainWindow
     private :
         AudioAnalyser * m_audioAnalyser;
         MidiComposer * m_midiComposer;
+        //UIRecorder * m_uiRecorder;
         std::vector<UITrackFrame> * m_tracks;
 
 };

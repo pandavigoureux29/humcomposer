@@ -18,6 +18,10 @@ UITrackFrame::UITrackFrame(QWidget * parent) : QFrame(parent)
     this->adjustSize();
 }
 
+void UITrackFrame::playMidi(){
+    qDebug() << "playTrack";
+}
+
 UITrackFrame::~UITrackFrame()
 {
 
