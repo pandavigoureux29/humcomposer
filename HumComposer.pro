@@ -1,6 +1,10 @@
 QMAKE_CXXFLAGS += -std=c++11
 QMAKE_CXXFLAGS_WARN_OFF -= -Wunused-variable
 
+win32 { LIBS += -lwinmm }
+linux* { LIBS += -lasound }
+haiku* { LIBS += -lmidi2 }
+
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
@@ -86,7 +90,13 @@ SOURCES += \
     ui/uirecorder.cpp \
     ui/uitrackactionpanel.cpp \
     ui/uitrackframe.cpp \
-    ui/uitrackmidipanel.cpp
+    ui/uitrackmidipanel.cpp \
+    controllers/tracksmanager.cpp \
+    controllers/track.cpp \
+    controllers/maincontroller.cpp \
+    QMidi/QMidiFile.cpp \
+    QMidi/QMidiOut.cpp \
+    controllers/midiplayer.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -177,7 +187,13 @@ HEADERS += \
     ui/uirecorder.h \
     ui/uitrackactionpanel.h \
     ui/uitrackframe.h \
-    ui/uitrackmidipanel.h
+    ui/uitrackmidipanel.h \
+    controllers/tracksmanager.h \
+    controllers/track.h \
+    controllers/maincontroller.h \
+    QMidi/QMidiFile.h \
+    QMidi/QMidiOut.h \
+    controllers/midiplayer.h
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 

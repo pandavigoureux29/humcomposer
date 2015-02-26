@@ -11,8 +11,7 @@
 #include <QVBoxLayout>
 #include <QLabel>
 
-#include "audioanalyser.h"
-//#include "mainwindow.h"
+#include "controllers/maincontroller.h"
 
 class UIRecorder: public QFrame{
 
@@ -21,6 +20,8 @@ class UIRecorder: public QFrame{
     public:
         UIRecorder(QWidget *parent = 0);
         ~UIRecorder();
+        void setMainController(MainController * mc);
+        void setOnRecordedCallback();
 
     public slots:
         void play();
@@ -28,14 +29,11 @@ class UIRecorder: public QFrame{
         void stop();
 
     private :
-
-        //MainWindow * m_mainWindow;
-
+        MainController * m_mainController;
         sf::SoundBufferRecorder * m_sfRecorder;
+
         sf::Sound * m_sfSound;
-
-        AudioAnalyser * m_analyser;
-
+        sf::SoundBuffer * m_sndBuffer;
 };
 
 #endif // UIRECORDER_H

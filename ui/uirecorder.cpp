@@ -2,9 +2,9 @@
 
 UIRecorder::UIRecorder(QWidget *parent) : QFrame(parent)
 {
-    //m_mainWindow = _mainWindow;
-    m_sfRecorder = new sf::SoundBufferRecorder();
 
+    m_sfRecorder = new sf::SoundBufferRecorder();
+    m_sndBuffer = new sf::SoundBuffer();
     //Layout holding left panel(actions) and right panel (audio graph)
     QHBoxLayout * mainLayout = new QHBoxLayout();
 
@@ -63,16 +63,43 @@ UIRecorder::UIRecorder(QWidget *parent) : QFrame(parent)
 void UIRecorder::record(){
     qDebug() << "RECORD";
     //m_sfRecorder->start(44100);
+
 }
 
 void UIRecorder::stop(){
     qDebug() << "STOP";
     //m_sfRecorder->stop();
-    //const sf::SoundBuffer& buffer = m_sfRecorder->getBuffer();
+    const sf::SoundBuffer& buffer = m_sfRecorder->getBuffer();
+
+    //Load file ( DEBUG)
+    sf::SoundBuffer * tempBuff = new sf::SoundBuffer();
+    bool res = tempBuff->loadFromFile( QDir::currentPath().toStdString()+"/la.wav" );
+    if(!res) return;
+    qDebug() << tempBuff->getSampleCount();
+    m_mainController->analyseSound(tempBuff->getSamples(),tempBuff->getSampleCount());
+    return;
+
+    //keep a copy
+    m_sndBuffer->loadFromSamples(buffer.getSamples(),buffer.getSampleCount(),
+                                 buffer.getChannelCount(), buffer.getSampleRate());
+    //analyse the recorded sound
+    m_mainController->analyseSound(buffer.getSamples(),buffer.getSampleCount());
 }
 
 void UIRecorder::play(){
     qDebug() << "PLAY";
+    /*m_sfSound = new sf::Sound();
+    m_sfSound->setBuffer(*m_sndBuffer);
+    m_sfSound->play();
+    */
+}
+
+//SETTERS
+void UIRecorder::setMainController(MainController * mc){
+    m_mainController = mc;
+}
+
+void UIRecorder::setOnRecordedCallback(){
 }
 
 UIRecorder::~UIRecorder()

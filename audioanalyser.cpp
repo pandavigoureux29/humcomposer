@@ -34,9 +34,7 @@ std::vector<NoteData> * AudioAnalyser::loadSound(std::string _filePath){
 
     if( res ){
         qDebug() << "Succeeded To Load File";
-        m_sound = new sf::Sound();
-        m_sound->setBuffer(*m_sndBuffer);
-        processSound();
+        processSound(m_sndBuffer->getSamples(),m_sndBuffer->getSampleCount());
         //sound->play();
     }else{
         qDebug() << "Failed To Load File";
@@ -44,13 +42,17 @@ std::vector<NoteData> * AudioAnalyser::loadSound(std::string _filePath){
     return m_notes;
 }
 
-void AudioAnalyser::processSound(){
+std::vector<NoteData> * AudioAnalyser::processSound(const short int * _bufferSamples, int _length){
+    //m_notes->clear();
 
+    m_totalSize = _length;
     //Go through the entire audio and process sample frames
-    const short int* samples = m_sndBuffer->getSamples();
+    const short int* samples = _bufferSamples;
     m_totalSize = m_sndBuffer->getSampleCount();
 
     findNotes(samples);
+
+    return m_notes;
 }
 
 /**
@@ -74,6 +76,9 @@ int AudioAnalyser::computeNote(fvec_t * _frameSample){
     return note;
 }
 
+/**
+ * Procss the entitre audio sample to find notes
+ */
 void AudioAnalyser::findNotes(const short int * _audio){
 
     m_notes = new std::vector<NoteData>();

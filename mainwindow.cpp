@@ -3,13 +3,12 @@
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
-    m_midiComposer = new MidiComposer();
+    m_mainController = new MainController();
 
-    m_audioAnalyser = new AudioAnalyser();
-
-    //MAin widget holding tracks & audioRecorder
+    //Main widget holding tracks & audioRecorder
     QWidget * mainWidget = new QWidget();
     QVBoxLayout * mainLayout = new QVBoxLayout();
+
     //TRACKS
     QWidget * tracksPanel = new QWidget();
     QVBoxLayout * m_tracksLayout = new QVBoxLayout();
@@ -22,7 +21,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     mainLayout->addWidget(tracksPanel);
 
     //Audio Recorder (frame at bottom)
-    UIRecorder * m_uiRecorder = new UIRecorder();
+    m_uiRecorder = new UIRecorder();
+    m_uiRecorder->setMainController(m_mainController);
     mainLayout->addWidget(m_uiRecorder);
 
     //Set Central Widget
@@ -31,15 +31,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     this->adjustSize();
 }
 
-void MainWindow::playMidi(){
-    qDebug() << "play";
-}
-
-void MainWindow::analyseSound(){
-    std::vector< NoteData > * vecNotes = m_audioAnalyser->loadSound("sound.wav");
-    m_midiComposer->buildMidiFromData(vecNotes,m_audioAnalyser->getTotalSize());
-}
-
+//==================CALLBACKS====================
 
 void MainWindow::onRecordedFinished(int _track, sf::SoundBuffer _recorderBuffer){
     qDebug() << "SOUND RECORDED with samplecount = " << _recorderBuffer.getSampleCount();

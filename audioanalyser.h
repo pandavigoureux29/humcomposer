@@ -17,7 +17,16 @@ class AudioAnalyser
 public:
     AudioAnalyser();
     ~AudioAnalyser();
+
+    /**
+     * Load a sound file and process it( debug only)
+     */
     std::vector<NoteData> * loadSound(std::string name);
+
+    /**
+     * Proccess buffers samples and create notes data
+     */
+    std::vector<NoteData> * processSound(const short int * _bufferSamples, int length);
     int getTotalSize();
 
 private:
@@ -25,8 +34,6 @@ private:
     sf::Sound * m_sound;
     short int * m_audio_sample ;
 
-    void processSound();
-    void createAudioSample();
     /**
      * Fill the output fvec_t with values stored in input
      */
