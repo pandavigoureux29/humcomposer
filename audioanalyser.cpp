@@ -1,7 +1,9 @@
 #include "audioanalyser.h"
+#include "controllers/maincontroller.h"
 
-AudioAnalyser::AudioAnalyser()
+AudioAnalyser::AudioAnalyser(MainController * _mainCtrl)
 {
+    m_mainController = _mainCtrl;
 
     m_sndBuffer = new sf::SoundBuffer();
     m_sound = new sf::Sound();

@@ -1,7 +1,8 @@
 #include "uitrackframe.h"
 
-UITrackFrame::UITrackFrame(QWidget * parent) : QFrame(parent)
+UITrackFrame::UITrackFrame(Track * _track) : QFrame(0)
 {
+    m_track = _track;
     //layout
     QHBoxLayout * hLayout = new QHBoxLayout();
 

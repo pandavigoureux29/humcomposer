@@ -86,7 +86,6 @@ SOURCES += \
     aubio/vecutils.c \
     audioanalyser.cpp \
     notedata.cpp \
-    actionbuttonsframe.cpp \
     ui/uirecorder.cpp \
     ui/uitrackactionpanel.cpp \
     ui/uitrackframe.cpp \
@@ -96,7 +95,8 @@ SOURCES += \
     controllers/maincontroller.cpp \
     QMidi/QMidiFile.cpp \
     QMidi/QMidiOut.cpp \
-    controllers/midiplayer.cpp
+    controllers/midiplayer.cpp \
+    ui/uiactionbuttonsframe.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -183,7 +183,6 @@ HEADERS += \
     aubio/vecutils.h \
     audioanalyser.h \
     notedata.h \
-    actionbuttonsframe.h \
     ui/uirecorder.h \
     ui/uitrackactionpanel.h \
     ui/uitrackframe.h \
@@ -193,7 +192,8 @@ HEADERS += \
     controllers/maincontroller.h \
     QMidi/QMidiFile.h \
     QMidi/QMidiOut.h \
-    controllers/midiplayer.h
+    controllers/midiplayer.h \
+    ui/uiactionbuttonsframe.h
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 

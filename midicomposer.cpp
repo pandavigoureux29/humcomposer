@@ -1,7 +1,10 @@
 #include "midicomposer.h"
+#include "controllers/maincontroller.h"
 
-MidiComposer::MidiComposer()
+MidiComposer::MidiComposer(MainController * _mainCtrl)
 {
+    m_mainController = _mainCtrl;
+
     m_message = new MIDITimedBigMessage(); // the object for individual midi events
 
     m_time = MIDIClockTime(); // time in midi ticks

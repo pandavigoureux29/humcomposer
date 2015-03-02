@@ -12,10 +12,13 @@
 #include "notedata.h"
 #include "aubio/aubio.h"
 
+
+class MainController;
+
 class AudioAnalyser
 {
 public:
-    AudioAnalyser();
+    AudioAnalyser(MainController * _mainCtrl);
     ~AudioAnalyser();
 
     /**
@@ -30,6 +33,7 @@ public:
     int getTotalSize();
 
 private:
+    MainController * m_mainController;
     sf::SoundBuffer * m_sndBuffer;
     sf::Sound * m_sound;
     short int * m_audio_sample ;

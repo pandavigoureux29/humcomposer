@@ -1,12 +1,15 @@
 #include "midiplayer.h"
+#include "maincontroller.h"
+#include <QDebug>
 
-MidiPlayer::MidiPlayer()
+MidiPlayer::MidiPlayer(MainController * _mainCtrl)
 {
-
+    m_mainController = _mainCtrl;
 }
 
-void MidiPlayer::play(){
-    QString filename = "C:\\Windows\\Media\\onestop.mid";
+void MidiPlayer::play(std::string _path){
+    QString filename = QDir::currentPath()+"/"+ QString::fromStdString(_path);
+    qDebug() << filename;
     QString midiOutName = "";
     m_midiFile = new QMidiFile();
 
@@ -18,6 +21,10 @@ void MidiPlayer::play(){
     //MidiPlayer* p = new MidiPlayer(midi_file,midi_out);
     //QObject::connect(this,SIGNAL(finished()),&a,SLOT(quit()));
     this->start();
+}
+
+void MidiPlayer::stop(){
+    this->quit();
 }
 
 void MidiPlayer::run(){

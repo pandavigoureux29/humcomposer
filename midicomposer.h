@@ -16,6 +16,9 @@
 
 #include "notedata.h"
 
+
+class MainController;
+
 using namespace jdksmidi;
 
 #include <iostream>
@@ -26,7 +29,7 @@ using namespace std;
 class MidiComposer
 {
 public:
-    MidiComposer();
+    MidiComposer(MainController * mainController);
     ~MidiComposer();
 
 public:
@@ -38,6 +41,7 @@ public:
     void buildMidiFromData(std::vector<NoteData> * _notesData, int _totalAudioSize);
 
 private :
+    MainController * m_mainController;
     MIDITimedBigMessage *m_message;
     MIDIMultiTrack *m_tracks;
     int m_tracksCount = 2;

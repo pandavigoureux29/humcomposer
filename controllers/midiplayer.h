@@ -13,15 +13,20 @@
 #include <QMainWindow>
 #include <QThread>
 
+class MainController;
+
 class MidiPlayer : public QThread
 {
     Q_OBJECT
 public:
-    MidiPlayer();
+    MidiPlayer(MainController * mainCtrl);
     ~MidiPlayer();
-    void play();
+    void play(std::string path);
+    void stop();
 
 private:
+    MainController * m_mainController;
+
     QMidiEvent* m_midiFileEvent;
     QMidiFile* m_midiFile;
     QMidiOut* m_midiOut;

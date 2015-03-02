@@ -11,11 +11,13 @@
 #include "uitrackactionpanel.h";
 #include "uitrackmidipanel.h"
 
+#include "../controllers/track.h";
+
 class UITrackFrame : public QFrame {
     Q_OBJECT
 
     public:
-        UITrackFrame(QWidget * parent = 0);
+        UITrackFrame(Track * _track);
         ~UITrackFrame();
 
     public slots:
@@ -24,6 +26,8 @@ class UITrackFrame : public QFrame {
     private:
         UITrackActionPanel * m_uiTAP;
         UITrackMidiPanel * m_uiMidiPanel;
+
+        Track * m_track;
 
 };
 

@@ -10,6 +10,7 @@
 //ui
 #include "ui/uitrackframe.h"
 #include "ui/uirecorder.h"
+#include "ui/uiactionbuttonsframe.h"
 
 #include <SFML/Audio.hpp>
 #include "notedata.h"
@@ -26,13 +27,21 @@ class MainWindow : public QMainWindow
         explicit MainWindow(QWidget *parent = 0);
         ~MainWindow();
     public :
+        void addTrack(Track * _track);
         //callbacks
         void onRecordedFinished(int track, sf::SoundBuffer recorderBuffer);
+
+    public slots:
+        void playMidi();
+        void stopMidi();
 
     private :
         MainController * m_mainController;
         UIRecorder * m_uiRecorder;
-        std::vector<UITrackFrame> * m_tracks;
+        UIActionButtonsFrame * m_uiActionButtons;
+        std::vector<UITrackFrame*> m_tracks;
+
+        QVBoxLayout * m_tracksLayout;
 
 };
 

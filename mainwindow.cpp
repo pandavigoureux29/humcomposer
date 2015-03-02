@@ -3,18 +3,20 @@
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
-    m_mainController = new MainController();
+    m_mainController = new MainController(this);
+    m_tracks = std::vector<UITrackFrame*>();
 
     //Main widget holding tracks & audioRecorder
     QWidget * mainWidget = new QWidget();
     QVBoxLayout * mainLayout = new QVBoxLayout();
 
+    //Buttons
+    m_uiActionButtons = new UIActionButtonsFrame(this);
+    mainLayout->addWidget(m_uiActionButtons);
+
     //TRACKS
     QWidget * tracksPanel = new QWidget();
-    QVBoxLayout * m_tracksLayout = new QVBoxLayout();
-    //create a track
-    UITrackFrame * trackPanel = new UITrackFrame();
-    m_tracksLayout->addWidget(trackPanel);
+    m_tracksLayout = new QVBoxLayout();
 
     tracksPanel->setLayout(m_tracksLayout);
 
@@ -29,6 +31,27 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     mainWidget->setLayout(mainLayout);
     this->setCentralWidget(mainWidget);
     this->adjustSize();
+
+    m_mainController->onMainWindowReady();
+}
+
+//================= UI FUNCTIONS ====================
+
+void MainWindow::addTrack(Track * _track){
+    qDebug() << "Adding ui track";
+    //create a track
+    UITrackFrame * uiTrackFrame = new UITrackFrame(_track);
+    m_tracksLayout->addWidget(uiTrackFrame);
+    m_tracks.push_back(uiTrackFrame);
+    uiTrackFrame->show();
+}
+
+void MainWindow::playMidi(){
+    m_mainController->playMidi();
+}
+
+void MainWindow::stopMidi(){
+    m_mainController->stopMidi();
 }
 
 //==================CALLBACKS====================
