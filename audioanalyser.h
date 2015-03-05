@@ -31,6 +31,8 @@ public:
      */
     std::vector<NoteData> * processSound(const short int * _bufferSamples, int length);
     int getTotalSize();
+    void setNoiseThreshold(int value);
+    int getNoiseThreshold();
 
 private:
     MainController * m_mainController;
@@ -42,16 +44,21 @@ private:
      * Fill the output fvec_t with values stored in input
      */
     void fillInputData( short int * input, fvec_t * output, int count);
+
     /**
      * Compute the note by pitch of the sample
      */
     int computeNote(fvec_t * frameSample);
+
     /**
      * Find notes in the audio sample provided
      */
     void findNotes(const short int * audioSample);
+    bool shiftCheck(int newNote,int _index);
 
-    void storeNote(NoteData * inputNote,std::map<std::string,int> * notesBufferCount);
+    void processAllNotes(std::vector<int> * allNotes);
+
+    void storeNote(NoteData * inputNote);
 
     //Aubio related variables
     uint_t m_winSize ; // window size
@@ -63,7 +70,16 @@ private:
     //under the noise threshold db, we judge the sample audio as silent
     int m_noiseThreshold;
 
+    //Shift Checking variables
+    int m_shiftCheckRange;
+    int m_shiftCheckCount;
+    int m_shiftCheckErrorCount;
+    int m_shiftBeginIndex ;
+    int m_shiftBeginNote;
+    std::map<std::string,int> * m_shiftCheckBuffer;
+
     std::vector<NoteData> * m_notes;
+    std::map<std::string,int> * m_notesBufferCount;
     int m_totalSize;
 
     aubio_pitch_t * m_aubioPitchObject;
@@ -73,7 +89,7 @@ private:
     /**
      */
     int findMaxAbs(fvec_t * vec, int length);
-    int findBestNote(std::map<std::string,int> * _map);
+    int findBestNote(std::map<std::string,int> * _map,int minimumCount);
 };
 
 #endif // AUDIOANALYSER_H

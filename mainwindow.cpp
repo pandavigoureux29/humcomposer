@@ -23,8 +23,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     mainLayout->addWidget(tracksPanel);
 
     //Audio Recorder (frame at bottom)
-    m_uiRecorder = new UIRecorder();
-    m_uiRecorder->setMainController(m_mainController);
+    m_uiRecorder = new UIRecorder(m_mainController);
     mainLayout->addWidget(m_uiRecorder);
 
     //Set Central Widget

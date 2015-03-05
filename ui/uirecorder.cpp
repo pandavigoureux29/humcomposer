@@ -1,10 +1,14 @@
 #include "uirecorder.h"
+#include "controllers/maincontroller.h"
 
-UIRecorder::UIRecorder(QWidget *parent) : QFrame(parent)
+UIRecorder::UIRecorder(MainController * _mc) : QFrame(0)
 {
+    m_mainController = _mc;
 
     m_sfRecorder = new sf::SoundBufferRecorder();
     m_sndBuffer = new sf::SoundBuffer();
+    m_sfSound = new sf::Sound();
+
     //Layout holding left panel(actions) and right panel (audio graph)
     QHBoxLayout * mainLayout = new QHBoxLayout();
 
@@ -27,71 +31,99 @@ UIRecorder::UIRecorder(QWidget *parent) : QFrame(parent)
         QObject::connect(recordButton, SIGNAL(clicked()), this, SLOT(record())) ;
 
         QPushButton * stopButton = new QPushButton("[]");
-        QObject::connect(stopButton, SIGNAL(clicked()), this, SLOT(stop())) ;
+        QObject::connect(stopButton, SIGNAL(clicked()), this, SLOT(stop())) ;        
 
         hLayout->addWidget(playButton);
         hLayout->addWidget(recordButton);
         hLayout->addWidget(stopButton);
-
         btnsWidget->setLayout(hLayout);
+
+        //buttons for converting
+        QWidget * btnsWidget2 = new QWidget();
+        QHBoxLayout * hLayout2 = new QHBoxLayout();
+
+        QPushButton * buildButton = new QPushButton("B");
+        QObject::connect(buildButton, SIGNAL(clicked()), this, SLOT(convertToMidi())) ;
+
+        m_noiseSpBox = new QSpinBox();
+        m_noiseSpBox->setValue(m_mainController->getAudioAnalyser()->getNoiseThreshold());
+        m_noiseSpBox->setMinimum(0);
+        QObject::connect(m_noiseSpBox,SIGNAL(valueChanged(int)),this,SLOT(onNoiseValueChanged()));
+
+        hLayout2->addWidget(m_noiseSpBox);
+        hLayout2->addWidget(buildButton);
+        btnsWidget2->setLayout(hLayout2);
+
     //end Buttons
 
-    leftPanel->setFixedSize(200,150);
+    leftPanel->setFixedSize(200,180);
     leftPanel->setFrameStyle(QFrame::Box);
 
     vLayout->addWidget(btnsWidget); //add widget to vertical layout for left panel
+    vLayout->addWidget(btnsWidget2);
     leftPanel->setLayout(vLayout); //set left panel main layout ( vertical )
 
     //===========================leftpanel
 
     //RIGHT PANEL==================
-    QFrame * rightPanel = new QFrame();
-
-    rightPanel->setMinimumWidth(500);
-    rightPanel->setFixedHeight(150);
-
-    rightPanel->setFrameStyle(QFrame::Box);
+    m_graph = new UIRecorderGraph();
     //==================rightpanel
 
     mainLayout->addWidget(leftPanel);
-    mainLayout->addWidget(rightPanel);
+    mainLayout->addWidget(m_graph);
 
     this->setLayout(mainLayout);
     this->adjustSize();
+
+    m_state = "idle";
 }
 
 void UIRecorder::record(){
     qDebug() << "RECORD";
-    //m_sfRecorder->start(44100);
-
+    m_graph->setInfoText("Recording");
+    m_sfRecorder->start(44100);
+    m_state = "recording";
 }
 
 void UIRecorder::stop(){
     qDebug() << "STOP";
-    //m_sfRecorder->stop();
-    const sf::SoundBuffer& buffer = m_sfRecorder->getBuffer();
+    m_graph->setInfoText("Stopped");
 
-    //Load file ( DEBUG)
-    sf::SoundBuffer * tempBuff = new sf::SoundBuffer();
-    bool res = tempBuff->loadFromFile( QDir::currentPath().toStdString()+"/la.wav" );
-    if(!res) return;
-    qDebug() << tempBuff->getSampleCount();
-    m_mainController->analyseSound(tempBuff->getSamples(),tempBuff->getSampleCount());
-    return;
-
-    //keep a copy
-    m_sndBuffer->loadFromSamples(buffer.getSamples(),buffer.getSampleCount(),
-                                 buffer.getChannelCount(), buffer.getSampleRate());
-    //analyse the recorded sound
-    m_mainController->analyseSound(buffer.getSamples(),buffer.getSampleCount());
+    if( m_state == "recording" ){
+        m_sfRecorder->stop();
+        const sf::SoundBuffer& buffer = m_sfRecorder->getBuffer();
+        //keep a copy
+        m_sndBuffer->loadFromSamples(buffer.getSamples(),buffer.getSampleCount(),
+                                     buffer.getChannelCount(), buffer.getSampleRate());
+        qDebug() << m_sndBuffer->getSampleCount();
+    }else if( m_state == "playing"){
+        m_sfSound->stop();
+    }
+    m_state = "idle";
 }
 
 void UIRecorder::play(){
-    qDebug() << "PLAY";
-    /*m_sfSound = new sf::Sound();
+    qDebug() << "PLAY" << this;
+    m_graph->setInfoText("Playing");
+    m_state = "playing";
     m_sfSound->setBuffer(*m_sndBuffer);
     m_sfSound->play();
-    */
+}
+
+void UIRecorder::convertToMidi(){
+    //Load file ( DEBUG)
+    m_sndBuffer->loadFromFile( QDir::currentPath().toStdString()+"/ex_sound.wav" );
+
+    qDebug() << m_sndBuffer->getSampleCount();
+    m_mainController->analyseSound(m_sndBuffer->getSamples(),m_sndBuffer->getSampleCount(),this);
+}
+
+void UIRecorder::onAnalyseFailed(){
+    m_graph->setInfoText("Failed Analyse");
+}
+
+void UIRecorder::onNoiseValueChanged(){
+    m_mainController->getAudioAnalyser()->setNoiseThreshold(m_noiseSpBox->value());
 }
 
 //SETTERS
@@ -99,11 +131,10 @@ void UIRecorder::setMainController(MainController * mc){
     m_mainController = mc;
 }
 
-void UIRecorder::setOnRecordedCallback(){
-}
-
 UIRecorder::~UIRecorder()
 {
-
+    delete m_sndBuffer;
+    delete m_sfRecorder;
+    delete m_sfSound;
 }
 

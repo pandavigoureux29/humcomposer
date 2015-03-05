@@ -9,7 +9,6 @@ MidiPlayer::MidiPlayer(MainController * _mainCtrl)
 
 void MidiPlayer::play(std::string _path){
     QString filename = QDir::currentPath()+"/"+ QString::fromStdString(_path);
-    qDebug() << filename;
     QString midiOutName = "";
     m_midiFile = new QMidiFile();
 

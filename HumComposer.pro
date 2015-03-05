@@ -96,7 +96,8 @@ SOURCES += \
     QMidi/QMidiFile.cpp \
     QMidi/QMidiOut.cpp \
     controllers/midiplayer.cpp \
-    ui/uiactionbuttonsframe.cpp
+    ui/uiactionbuttonsframe.cpp \
+    ui/uirecordergraph.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -193,7 +194,8 @@ HEADERS += \
     QMidi/QMidiFile.h \
     QMidi/QMidiOut.h \
     controllers/midiplayer.h \
-    ui/uiactionbuttonsframe.h
+    ui/uiactionbuttonsframe.h \
+    ui/uirecordergraph.h
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 
