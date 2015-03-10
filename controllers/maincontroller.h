@@ -24,6 +24,7 @@ public:
     void onSoundAnalyseComplete();
     void onTrackAdded(unsigned int id);
 
+
     //getters
     AudioAnalyser * getAudioAnalyser();
 

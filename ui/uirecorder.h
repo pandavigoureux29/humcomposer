@@ -10,8 +10,10 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QSpinBox>
+#include <QTimer>
 
 #include "uirecordergraph.h"
+#include "other/customrecorder.h"
 
 class MainController;
 
@@ -31,18 +33,20 @@ class UIRecorder: public QFrame{
         void stop();
         void convertToMidi();
         void onNoiseValueChanged();
+        void onTimerRecordTimeOut();
 
     private :
         UIRecorderGraph * m_graph;
         QSpinBox * m_noiseSpBox;
 
         MainController * m_mainController;
-        sf::SoundBufferRecorder * m_sfRecorder;
+        CustomRecorder * m_sfRecorder;
 
         sf::Sound * m_sfSound;
         sf::SoundBuffer * m_sndBuffer;
 
         std::string m_state;
+        QTimer * m_timerRecord;
 
 };
 

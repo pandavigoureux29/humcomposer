@@ -5,9 +5,12 @@ UIRecorder::UIRecorder(MainController * _mc) : QFrame(0)
 {
     m_mainController = _mc;
 
-    m_sfRecorder = new sf::SoundBufferRecorder();
+    m_sfRecorder = new CustomRecorder();
     m_sndBuffer = new sf::SoundBuffer();
     m_sfSound = new sf::Sound();
+
+    m_timerRecord = new QTimer();
+    QObject::connect( m_timerRecord,SIGNAL(timeout()),this,SLOT(onTimerRecordTimeOut()) );
 
     //Layout holding left panel(actions) and right panel (audio graph)
     QHBoxLayout * mainLayout = new QHBoxLayout();
@@ -80,14 +83,14 @@ UIRecorder::UIRecorder(MainController * _mc) : QFrame(0)
 
 void UIRecorder::record(){
     qDebug() << "RECORD";
-    m_graph->setInfoText("Recording");
     m_sfRecorder->start(44100);
     m_state = "recording";
+    m_timerRecord->start(100);
+    m_graph->onRecordingStart();
 }
 
 void UIRecorder::stop(){
     qDebug() << "STOP";
-    m_graph->setInfoText("Stopped");
 
     if( m_state == "recording" ){
         m_sfRecorder->stop();
@@ -95,7 +98,11 @@ void UIRecorder::stop(){
         //keep a copy
         m_sndBuffer->loadFromSamples(buffer.getSamples(),buffer.getSampleCount(),
                                      buffer.getChannelCount(), buffer.getSampleRate());
-        qDebug() << m_sndBuffer->getSampleCount();
+        //qDebug() << m_sndBuffer->getSampleCount();
+
+        m_graph->onRecordingStop(m_sndBuffer);
+        m_timerRecord->stop();
+
     }else if( m_state == "playing"){
         m_sfSound->stop();
     }
@@ -104,7 +111,6 @@ void UIRecorder::stop(){
 
 void UIRecorder::play(){
     qDebug() << "PLAY" << this;
-    m_graph->setInfoText("Playing");
     m_state = "playing";
     m_sfSound->setBuffer(*m_sndBuffer);
     m_sfSound->play();
@@ -118,8 +124,22 @@ void UIRecorder::convertToMidi(){
     m_mainController->analyseSound(m_sndBuffer->getSamples(),m_sndBuffer->getSampleCount(),this);
 }
 
+//===================================
+//======== SLOTS ====================
+//===================================
+
+void UIRecorder::onTimerRecordTimeOut(){
+    if( m_state == "recording" ){
+        m_graph->onRecordingProcess(m_sfRecorder->getSamples());
+    }
+}
+
+//==================================
+//========CALLBACKS=================
+//==================================
+
 void UIRecorder::onAnalyseFailed(){
-    m_graph->setInfoText("Failed Analyse");
+
 }
 
 void UIRecorder::onNoiseValueChanged(){
