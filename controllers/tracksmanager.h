@@ -4,6 +4,8 @@
 #include "track.h"
 #include <vector>
 
+#include "notedata.h"
+
 class MainController;
 
 class TracksManager
@@ -13,6 +15,7 @@ public:
     ~TracksManager();
     Track * getTrack(unsigned int _id);
     void addTrack();
+    void buildMidiToTrack(unsigned int track, std::vector<NoteData> * vecNotes);
 
 private:
     //vars

@@ -28,6 +28,7 @@ class MainWindow : public QMainWindow
         ~MainWindow();
     public :
         void addTrack(Track * _track);
+        void refreshTrack(unsigned int trackID);
         //callbacks
         void onRecordedFinished(int track, sf::SoundBuffer recorderBuffer);
 

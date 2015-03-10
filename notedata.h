@@ -6,6 +6,7 @@ class NoteData{
 public:
     NoteData();
     ~NoteData();
+    NoteData * clone();
 
     int begin;
     int end;
@@ -19,6 +20,8 @@ public:
      * Return duration of the note in ms
     */
     float duration();
+
+    float timeBegin();
 
     void setSampleRate(int _sampleRate);
     int getSampleRate();

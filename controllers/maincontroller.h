@@ -28,7 +28,6 @@ public:
     //getters
     AudioAnalyser * getAudioAnalyser();
 
-
 private :
     MainWindow * m_mainWindow;
 

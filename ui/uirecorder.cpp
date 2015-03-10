@@ -105,15 +105,17 @@ void UIRecorder::stop(){
 
     }else if( m_state == "playing"){
         m_sfSound->stop();
+        m_graph->onPlayStop();
     }
     m_state = "idle";
 }
 
 void UIRecorder::play(){
-    qDebug() << "PLAY" << this;
+    qDebug() << "PLAY" ;
     m_state = "playing";
     m_sfSound->setBuffer(*m_sndBuffer);
     m_sfSound->play();
+    m_graph->onPlayStart();
 }
 
 void UIRecorder::convertToMidi(){

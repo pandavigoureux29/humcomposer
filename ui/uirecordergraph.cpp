@@ -37,6 +37,10 @@ void UIRecorderGraph::buildGraphFromBuffer(sf::SoundBuffer * _sfBuffer){
 }
 
 
+//===================================
+//          RECORDING
+//===================================
+
 void UIRecorderGraph::onRecordingStart(){
     m_currentSampleIndex = 0;
 }
@@ -76,6 +80,22 @@ void UIRecorderGraph::onRecordingProcess(std::vector<short int> * _samples){
 }
 
 void UIRecorderGraph::onRecordingStop(sf::SoundBuffer * _sndBuffer){
+
+}
+
+//===================================
+//              PLAY
+//===================================
+
+void UIRecorderGraph::onPlayStart(){
+
+}
+
+void UIRecorderGraph::onPlayProgress(int _sampleCount){
+    float currentX = _sampleCount * m_xScale;
+}
+
+void UIRecorderGraph::onPlayStop(){
 
 }
 

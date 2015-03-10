@@ -19,6 +19,9 @@ class UITrackFrame : public QFrame {
     public:
         UITrackFrame(Track * _track);
         ~UITrackFrame();
+        void refresh();
+
+        Track * getTrack();
 
     public slots:
         void playMidi();

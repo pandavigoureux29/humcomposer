@@ -33,6 +33,10 @@ public slots:
   void onRecordingStart();
   void onRecordingProcess(std::vector<short int> * samples);
   void onRecordingStop(sf::SoundBuffer * _sndBuffer);
+  //Play
+  void onPlayStart();
+  void onPlayProgress(int sampleCount);
+  void onPlayStop();
 
 private :
     QCustomPlot * m_plot;

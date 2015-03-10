@@ -22,6 +22,8 @@ void MainController::analyseSound(const short int * _buffer,int _length,UIRecord
         _recorder->onAnalyseFailed();
     }else{
         m_midiComposer->buildMidiFromData(vecNotes,m_audioAnalyser->getTotalSize());
+        m_tracksManager->buildMidiToTrack(0,vecNotes);
+        m_mainWindow->refreshTrack(0);
     }
 }
 
@@ -46,7 +48,7 @@ void MainController::onSoundAnalyseComplete(){
 }
 
 void MainController::onTrackAdded(unsigned int _id){
-   //qDebug() << " [MC] track "<<_id<<" added";
+   qDebug() << "[MC] track "<<_id<<" added";
    m_mainWindow->addTrack(m_tracksManager->getTrack(_id));
 }
 

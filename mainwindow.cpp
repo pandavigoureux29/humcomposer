@@ -37,7 +37,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 //================= UI FUNCTIONS ====================
 
 void MainWindow::addTrack(Track * _track){
-    qDebug() << "Adding ui track";
+    qDebug() << "Adding ui track" << (_track!=NULL);
     //create a track
     UITrackFrame * uiTrackFrame = new UITrackFrame(_track);
     m_tracksLayout->addWidget(uiTrackFrame);
@@ -51,6 +51,10 @@ void MainWindow::playMidi(){
 
 void MainWindow::stopMidi(){
     m_mainController->stopMidi();
+}
+
+void MainWindow::refreshTrack(unsigned int _trackID){
+    m_tracks.at(_trackID)->refresh();
 }
 
 //==================CALLBACKS====================

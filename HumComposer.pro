@@ -98,7 +98,8 @@ SOURCES += \
     controllers/midiplayer.cpp \
     ui/uiactionbuttonsframe.cpp \
     ui/uirecordergraph.cpp \
-    QCustomPlot/qcustomplot.cpp
+    QCustomPlot/qcustomplot.cpp \
+    ui/uinote.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -198,7 +199,8 @@ HEADERS += \
     ui/uiactionbuttonsframe.h \
     ui/uirecordergraph.h \
     QCustomPlot/qcustomplot.h \
-    other/customrecorder.h
+    other/customrecorder.h \
+    ui/uinote.h
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
 

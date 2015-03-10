@@ -137,7 +137,7 @@ void MidiComposer::buildMidiFromData(std::vector<NoteData> * _notesData, int _to
         //Add note
         pushNote(note->note,1,note->duration());
         time = note->end;
-        qDebug() << "add " << note->note << " dur: " << note->duration();
+        qDebug() << "add " << note->note << " at "<< note->timeBegin() << " dur: " << note->duration();
     }
     //we have processed all notes, if the total size isn't reached, add silence
     if( time < _totalAudioSize){
