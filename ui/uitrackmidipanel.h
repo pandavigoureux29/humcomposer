@@ -30,6 +30,8 @@ private :
 
     UITrackFrame * m_trackFrame;
 
+    std::vector<UINote*> * m_uiNotes;
+
     float m_pixelPerSecUnit;
 };
 

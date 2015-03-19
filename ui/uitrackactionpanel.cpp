@@ -3,8 +3,6 @@
 UITrackActionPanel::UITrackActionPanel(QWidget * parent) : QFrame(parent)
 {
 
-    m_sfRecorder = new sf::SoundBufferRecorder();
-
     //UI
     //Vertical Layout holding title & audio buttons
     QVBoxLayout * vLayout = new QVBoxLayout();
@@ -42,13 +40,10 @@ UITrackActionPanel::UITrackActionPanel(QWidget * parent) : QFrame(parent)
 
 void UITrackActionPanel::record(){
     qDebug() << "RECORD";
-    //m_sfRecorder->start(44100);
 }
 
 void UITrackActionPanel::stop(){
     qDebug() << "STOP";
-    //m_sfRecorder->stop();
-    //const sf::SoundBuffer& buffer = m_sfRecorder->getBuffer();
 }
 
 UITrackActionPanel::~UITrackActionPanel()

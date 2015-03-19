@@ -1,7 +1,10 @@
 #ifndef UIRECORDER_H
 #define UIRECORDER_H
 
-#include <SFML/Audio.hpp>
+
+#include <QAudioInput>
+#include <QAudioOutput>
+#include <QBuffer>
 #include <QDebug>
 #include <QFrame>
 
@@ -10,10 +13,9 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QSpinBox>
-#include <QTimer>
+#include <QFile>
 
 #include "uirecordergraph.h"
-#include "other/customrecorder.h"
 
 class MainController;
 
@@ -33,20 +35,38 @@ class UIRecorder: public QFrame{
         void stop();
         void convertToMidi();
         void onNoiseValueChanged();
-        void onTimerRecordTimeOut();
+        //Input Audio
+        void onAudioInputStateChanged(QAudio::State newState);
+        void readMore();
 
     private :
+        const int BUFFER_SIZE = 16384;
+
         UIRecorderGraph * m_graph;
         QSpinBox * m_noiseSpBox;
 
         MainController * m_mainController;
-        CustomRecorder * m_sfRecorder;
 
-        sf::Sound * m_sfSound;
-        sf::SoundBuffer * m_sndBuffer;
+        QAudioFormat m_format;
+        //INPUT DEVICE VARIABLES
+        QAudioInput * m_audioInput;
+        QAudioDeviceInfo m_inputDeviceInfo;
+        QIODevice * m_inputIODevice;
+
+        //OUTPUT DEVICE
+        QAudioOutput * m_audioOutput;
+        QAudioDeviceInfo m_outputDeviceInfo;
+        QIODevice * m_outputIODevice;
+        QBuffer * m_outputBuffer;
+
+        QByteArray * m_byteArrayBuffer;
+        std::vector<short int> m_samples;
+
+        QFile * m_outputFile;
 
         std::string m_state;
-        QTimer * m_timerRecord;
+
+        void createInputOuptutDevice();
 
 };
 

@@ -3,7 +3,6 @@
 
 #include <QFrame>
 #include <QWidget>
-#include <SFML/Audio.hpp>
 #include <QDebug>
 #include <QLabel>
 #include <QVBoxLayout>
@@ -21,7 +20,7 @@ public:
     UIRecorderGraph();
     ~UIRecorderGraph();
 
-    void buildGraphFromBuffer(sf::SoundBuffer * m_sfBuffer);
+    void buildGraphFromBuffer(std::vector<short int> * buffer);
     void setInfoText(std::string _infoText);
 
 public slots:
@@ -32,7 +31,7 @@ public slots:
   //Recording
   void onRecordingStart();
   void onRecordingProcess(std::vector<short int> * samples);
-  void onRecordingStop(sf::SoundBuffer * _sndBuffer);
+  void onRecordingStop();
   //Play
   void onPlayStart();
   void onPlayProgress(int sampleCount);
@@ -49,6 +48,7 @@ private :
     int m_yPlotRange;
 
     float m_xScale;
+    float m_yScale;
 
     void setupPlot();
 

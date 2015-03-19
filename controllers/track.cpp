@@ -10,8 +10,8 @@ Track::Track(unsigned int _id, TracksManager * _trackManager)
 
 void Track::setNotes(std::vector<NoteData> * _notes){
     for( int i=0; i < _notes->size(); i++){
-        NoteData * note = _notes->at(i).clone();
-        m_notes->push_back(*note);
+        //NoteData * note = _notes->at(i).clone();
+        //m_notes->push_back(*note);
     }
 }
 

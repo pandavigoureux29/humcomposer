@@ -5,7 +5,6 @@
 #include <QPushButton>
 #include <QDebug>
 #include <QDir>
-#include <SFML/Audio.hpp>
 #include <math.h>
 #include <map>
 
@@ -22,22 +21,15 @@ public:
     ~AudioAnalyser();
 
     /**
-     * Load a sound file and process it( debug only)
-     */
-    std::vector<NoteData> * loadSound(std::string name);
-
-    /**
      * Proccess buffers samples and create notes data
      */
-    std::vector<NoteData> * processSound(const short int * _bufferSamples, int length);
+    std::vector<NoteData> * processSound(std::vector<short int> * samples);
     int getTotalSize();
     void setNoiseThreshold(int value);
     int getNoiseThreshold();
 
 private:
     MainController * m_mainController;
-    sf::SoundBuffer * m_sndBuffer;
-    sf::Sound * m_sound;
     short int * m_audio_sample ;
 
     /**
@@ -53,7 +45,7 @@ private:
     /**
      * Find notes in the audio sample provided
      */
-    void findNotes(const short int * audioSample);
+    void findNotes(std::vector<short int> * audio);
     bool shiftCheck(int newNote,int _index);
 
     void processAllNotes(std::vector<int> * allNotes);

@@ -59,8 +59,8 @@ void MainWindow::refreshTrack(unsigned int _trackID){
 
 //==================CALLBACKS====================
 
-void MainWindow::onRecordedFinished(int _track, sf::SoundBuffer _recorderBuffer){
-    qDebug() << "SOUND RECORDED with samplecount = " << _recorderBuffer.getSampleCount();
+void MainWindow::onRecordedFinished(int _track){
+    //qDebug() << "SOUND RECORDED with samplecount = " << _recorderBuffer.getSampleCount();
 }
 
 MainWindow::~MainWindow()

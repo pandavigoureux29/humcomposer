@@ -14,7 +14,7 @@ class MainController
 public:
     MainController(MainWindow * mainWindow);
     ~MainController();
-    void analyseSound(const short int * samples, int length, UIRecorder * _recorder=0);
+    void analyseSound(std::vector<short int> * samples, UIRecorder * _recorder=0);
     void buildMidiToTrack();
     void playMidi();
     void stopMidi();

@@ -5,9 +5,6 @@ AudioAnalyser::AudioAnalyser(MainController * _mainCtrl)
 {
     m_mainController = _mainCtrl;
 
-    m_sndBuffer = new sf::SoundBuffer();
-    m_sound = new sf::Sound();
-
     m_notesBufferCount = new std::map<std::string,int>();
     m_notes = new std::vector<NoteData>();
 
@@ -20,6 +17,7 @@ AudioAnalyser::AudioAnalyser(MainController * _mainCtrl)
 
     //create pitch object
     m_aubioPitchObject = new_aubio_pitch ("fcomb", m_winSize, m_hopSize, m_samplerate);
+
     //Create tss object
     //m_aubioTssObject = new_aubio_tss(m_winSize,m_hopSize);
 
@@ -30,35 +28,15 @@ AudioAnalyser::AudioAnalyser(MainController * _mainCtrl)
 
 }
 
-std::vector<NoteData> * AudioAnalyser::loadSound(std::string _filePath){
-    QDir dir;
-    std::string path = dir.currentPath().toStdString()+"/"+_filePath;
-    qDebug() << path.c_str();
 
-    bool res = false;
-    try{
-        res = m_sndBuffer->loadFromFile(path);
-    }catch( std::exception & e){
-        qDebug() << e.what();
-    }
-
-    if( res ){
-        qDebug() << "Succeeded To Load File";
-        processSound(m_sndBuffer->getSamples(),m_sndBuffer->getSampleCount());
-    }else{
-        qDebug() << "Failed To Load File";
-    }
-    return m_notes;
-}
-
-std::vector<NoteData> * AudioAnalyser::processSound(const short int * _bufferSamples, int _length){
+std::vector<NoteData> * AudioAnalyser::processSound(std::vector<short int> * _samples){
     //m_notes->clear();
 
     qDebug() << m_noiseThreshold;
 
-    m_totalSize = _length;
+    m_totalSize = _samples->size();
     //Go through the entire audio and process sample frames
-    findNotes(_bufferSamples);
+    findNotes(_samples);
 
     return m_notes;
 }
@@ -87,7 +65,7 @@ int AudioAnalyser::computeNote(fvec_t * _frameSample){
 /**
  * Procss the entitre audio sample to find notes
  */
-void AudioAnalyser::findNotes(const short int * _audio){
+void AudioAnalyser::findNotes(std::vector<short int> * _audio){
 
     m_notes->clear();
     m_notesBufferCount->clear();
@@ -102,11 +80,11 @@ void AudioAnalyser::findNotes(const short int * _audio){
     NoteData * curNote = new NoteData();
 
     //go through every audio value
-    while(index < m_totalSize ){
+    while(index < _audio->size() -1 ){
         curSampleCount++;
         index++;
         //store a frame of m_hopSize length as input
-        input->data[curSampleCount] = *(_audio + index);
+        input->data[curSampleCount] = _audio->at(index);
         //when we have filled the input data
         if( curSampleCount >= (int) m_hopSize ){
             curSampleCount =0;

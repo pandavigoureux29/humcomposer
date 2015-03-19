@@ -6,6 +6,7 @@ UIRecorderGraph::UIRecorderGraph() : QFrame(0)
     m_xPlotRange = 100; m_yPlotRange = 500;
     m_currentSampleIndex = 0;
     m_xScale = 0.001;
+    m_yScale = 0.03;
     //vertical layout
     QVBoxLayout * vLayout = new QVBoxLayout();
 
@@ -32,7 +33,7 @@ UIRecorderGraph::UIRecorderGraph() : QFrame(0)
     this->setLayout(vLayout);
 }
 
-void UIRecorderGraph::buildGraphFromBuffer(sf::SoundBuffer * _sfBuffer){
+void UIRecorderGraph::buildGraphFromBuffer(std::vector<short int> * _samples){
 
 }
 
@@ -59,7 +60,7 @@ void UIRecorderGraph::onRecordingProcess(std::vector<short int> * _samples){
       int index = i - m_currentSampleIndex;
       if( index < x.size() ){
           x[index] = i * m_xScale ;
-          y[index] = (double) abs( _samples->at(i) * 0.03 );
+          y[index] = (double) abs( _samples->at(i) * m_yScale );
       }
     }
 
@@ -79,7 +80,7 @@ void UIRecorderGraph::onRecordingProcess(std::vector<short int> * _samples){
 
 }
 
-void UIRecorderGraph::onRecordingStop(sf::SoundBuffer * _sndBuffer){
+void UIRecorderGraph::onRecordingStop(){
 
 }
 

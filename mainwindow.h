@@ -12,7 +12,6 @@
 #include "ui/uirecorder.h"
 #include "ui/uiactionbuttonsframe.h"
 
-#include <SFML/Audio.hpp>
 #include "notedata.h"
 
 namespace Ui {
@@ -30,7 +29,7 @@ class MainWindow : public QMainWindow
         void addTrack(Track * _track);
         void refreshTrack(unsigned int trackID);
         //callbacks
-        void onRecordedFinished(int track, sf::SoundBuffer recorderBuffer);
+        void onRecordedFinished(int track);
 
     public slots:
         void playMidi();

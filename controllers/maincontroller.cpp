@@ -12,16 +12,22 @@ MainController::MainController(MainWindow * _mainWindow)
     m_midiPlayer = new MidiPlayer(this);
 }
 
-void MainController::analyseSound(const short int * _buffer,int _length,UIRecorder * _recorder){
+void MainController::analyseSound(std::vector<short int> * samples,UIRecorder * _recorder){
     //std::vector< NoteData > * vecNotes = m_audioAnalyser->loadSound("sound.wav");
     //qDebug() << "vecnoteSize " << vecNotes->size();
-    std::vector< NoteData > * vecNotes = m_audioAnalyser->processSound(_buffer,_length);
+
+    //Process samples to find notes
+    std::vector< NoteData > * vecNotes = m_audioAnalyser->processSound(samples);
     qDebug() << "vecnoteSize " << vecNotes->size() ;
 
+    //if no note found, this is a fail
     if( vecNotes->size() == 0 ){
         _recorder->onAnalyseFailed();
     }else{
+        //build the midi file
+        //( temporary. We should build the entire midi file, not just the curren notes)
         m_midiComposer->buildMidiFromData(vecNotes,m_audioAnalyser->getTotalSize());
+        //send the notes to the track 0 (first) and refresh it (also temporary)
         m_tracksManager->buildMidiToTrack(0,vecNotes);
         m_mainWindow->refreshTrack(0);
     }

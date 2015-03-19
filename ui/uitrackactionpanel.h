@@ -10,8 +10,6 @@
 #include <QPushButton>
 #include <QHBoxLayout>
 
-#include <SFML/Audio.hpp>
-
 #include "ui/uirecorder.h"
 
 class UITrackActionPanel: public QFrame{
@@ -27,7 +25,6 @@ class UITrackActionPanel: public QFrame{
 
     private:
         QLabel * m_title;
-        sf::SoundBufferRecorder * m_sfRecorder;
 };
 
 #endif // UITRACKACTIONPANEL_H

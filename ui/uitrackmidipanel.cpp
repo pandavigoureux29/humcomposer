@@ -5,6 +5,7 @@ UITrackMidiPanel::UITrackMidiPanel(UITrackFrame * _uitrackframe): QFrame(0)
 {
     m_trackFrame = _uitrackframe;
     m_pixelPerSecUnit = 200;
+    m_uiNotes = new std::vector<UINote*>();
 
     m_scrollArea = new QScrollArea();
 
@@ -36,10 +37,17 @@ void UITrackMidiPanel::buildTrack(){
 }
 
 void UITrackMidiPanel::refresh(){
+
     qDebug() << "refresh" << (m_trackFrame->getTrack()!=NULL);
+    UINote * un = new UINote();
+    m_uiNotes->push_back(un);
+
+    return;
     for( int i =0; i < m_trackFrame->getTrack()->getNotes()->size(); i++){
+    //for(int i=0 ; i < 1; i++){
         NoteData * noteData = & m_trackFrame->getTrack()->getNotes()->at(i);
         UINote * uinote = new UINote(m_content);
+        m_uiNotes->push_back(uinote);
         int x = noteData->timeBegin()*m_pixelPerSecUnit * 0.001;
         qDebug() << "note "<< (noteData->note) << "x : " << x;
         //Set up

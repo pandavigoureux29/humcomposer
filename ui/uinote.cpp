@@ -2,6 +2,8 @@
 
 UINote::UINote(QWidget * parent) : QFrame(parent)
 {
+    qDebug() << "Note";
+
     QHBoxLayout * mainLayout = new QHBoxLayout();
     mainLayout->setMargin(0);
     mainLayout->setContentsMargins(QMargins(0,0,0,0));
@@ -37,12 +39,11 @@ UINote::UINote(QWidget * parent) : QFrame(parent)
     this->setMaximumHeight(40);
     this->setFrameStyle(QFrame::Box);
     this->setLayout(mainLayout);
-    //this->setContentsMargins(QMargins(0,0,0,0));
 }
 
 void UINote::setUp(NoteData * _noteData){
-    m_noteData = _noteData;
-    m_labelNote->setText( QString::fromStdString( std::to_string(_noteData->note) ) );
+    /*m_noteData = _noteData;
+    m_labelNote->setText( QString::fromStdString( std::to_string(_noteData->note) ) );*/
 }
 
 void UINote::onUp(){
