@@ -50,7 +50,10 @@ private :
     float m_xScale;
     float m_yScale;
 
+    int m_lastBarCountTime;
+
     void setupPlot();
+    void addTimeBar(int sampleCountBegin);
 
 };
 

@@ -27,6 +27,7 @@ public:
     int getTotalSize();
     void setNoiseThreshold(int value);
     int getNoiseThreshold();
+    std::vector<short int> * killNoiseInSamples(std::vector<short int> * samples, int noiseThreshold);
 
 private:
     MainController * m_mainController;

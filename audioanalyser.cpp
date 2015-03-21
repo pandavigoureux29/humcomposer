@@ -235,6 +235,38 @@ void AudioAnalyser::setNoiseThreshold(int _value){
 
 //=========== UTILS ====================
 
+std::vector<short int> * AudioAnalyser::killNoiseInSamples(std::vector<short> * _samples, int _noiseThreshold){
+    std::vector<short int> * result = new std::vector<short int>();
+    if(_samples->size() <= 0)
+        return result;
+
+    int index = 0; //current index in the input samples
+    int curSampleCount = 0; //count in the sample window process
+    fvec_t *input = new_fvec (m_hopSize); // input buffer
+
+    while(index < _samples->size()  ){
+        if( curSampleCount >= (int) m_hopSize ){
+            curSampleCount =0;
+            //compute average db level of the sample
+            smpl_t db = aubio_level_detection(input,0);
+            //if db not sufficient, push zeros
+            for(int i=index-m_hopSize; i < index; i++ ){
+                if( db < _noiseThreshold || i >= _samples->size()){
+                    result->push_back(0);
+                }else{
+                    result->push_back(_samples->at(i));
+                }
+            }
+        }
+        //store sample value in input ( a frame of the sound )
+        input->data[curSampleCount] = _samples->at(index);
+        curSampleCount++;
+        index++;
+    }
+    del_fvec(input);
+    return result;
+}
+
 // Put _input values in _output
 void AudioAnalyser::fillInputData( short int * _input, fvec_t * _output, int _count){
     int i = 0;

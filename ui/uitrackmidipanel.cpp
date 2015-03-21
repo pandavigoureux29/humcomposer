@@ -37,12 +37,10 @@ void UITrackMidiPanel::buildTrack(){
 }
 
 void UITrackMidiPanel::refresh(){
-
     qDebug() << "refresh" << (m_trackFrame->getTrack()!=NULL);
     UINote * un = new UINote();
     m_uiNotes->push_back(un);
 
-    return;
     for( int i =0; i < m_trackFrame->getTrack()->getNotes()->size(); i++){
     //for(int i=0 ; i < 1; i++){
         NoteData * noteData = & m_trackFrame->getTrack()->getNotes()->at(i);

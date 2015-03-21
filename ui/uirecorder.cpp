@@ -43,25 +43,31 @@ UIRecorder::UIRecorder(MainController * _mc) : QFrame(0)
         QWidget * btnsWidget2 = new QWidget();
         QHBoxLayout * hLayout2 = new QHBoxLayout();
 
-        QPushButton * buildButton = new QPushButton("B");
-        QObject::connect(buildButton, SIGNAL(clicked()), this, SLOT(convertToMidi())) ;
-
+        //NOISE
         m_noiseSpBox = new QSpinBox();
         m_noiseSpBox->setValue(m_mainController->getAudioAnalyser()->getNoiseThreshold());
         m_noiseSpBox->setMinimum(0);
         QObject::connect(m_noiseSpBox,SIGNAL(valueChanged(int)),this,SLOT(onNoiseValueChanged()));
 
+        QPushButton * killNoiseButton = new QPushButton("Kill");
+        QObject::connect(killNoiseButton, SIGNAL(clicked()), this, SLOT(killNoise())) ;
+
         hLayout2->addWidget(m_noiseSpBox);
-        hLayout2->addWidget(buildButton);
-        btnsWidget2->setLayout(hLayout2);
+        hLayout2->addWidget(killNoiseButton);
+        btnsWidget2->setLayout(hLayout2);        
+
+        //BUILD BUTTON
+        QPushButton * buildButton = new QPushButton("Build");
+        QObject::connect(buildButton, SIGNAL(clicked()), this, SLOT(convertToMidi())) ;
 
     //end Buttons
 
-    leftPanel->setFixedSize(200,180);
+    leftPanel->setFixedSize(200,230);
     leftPanel->setFrameStyle(QFrame::Box);
 
     vLayout->addWidget(btnsWidget); //add widget to vertical layout for left panel
-    vLayout->addWidget(btnsWidget2);
+    vLayout->addWidget(btnsWidget2);    
+    vLayout->addWidget(buildButton);
     leftPanel->setLayout(vLayout); //set left panel main layout ( vertical )
 
     //===========================leftpanel
@@ -117,7 +123,7 @@ void UIRecorder::convertToMidi(){
     //Load file ( DEBUG)
     //m_sndBuffer->loadFromFile( QDir::currentPath().toStdString()+"/ex_sound.wav" );
 
-    //m_mainController->analyseSound(&m_samples,this);
+    m_mainController->analyseSound(&m_samples,this);
 }
 
 //===================================
@@ -177,6 +183,24 @@ void UIRecorder::readMore(){
         }*/
 
     }
+}
+
+void UIRecorder::killNoise(){
+    std::vector<short int> * newSamples = m_mainController->getAudioAnalyser()->killNoiseInSamples(&m_samples,m_noiseSpBox->value());
+
+    //Copy new samples
+    for(int i=0; i < newSamples->size(); i++){
+        if( i >= m_samples.size())
+            break;
+        m_samples.at(i) = newSamples->at(i);
+    }
+
+    //clean
+    newSamples->clear();
+    delete newSamples;
+
+    //Replot graph with new values
+    m_graph->buildGraphFromBuffer(&m_samples);
 }
 
 //==================================

@@ -35,6 +35,7 @@ class UIRecorder: public QFrame{
         void stop();
         void convertToMidi();
         void onNoiseValueChanged();
+        void killNoise();
         //Input Audio
         void onAudioInputStateChanged(QAudio::State newState);
         void readMore();
