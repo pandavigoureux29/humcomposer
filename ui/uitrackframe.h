@@ -8,10 +8,10 @@
 #include <QPushButton>
 #include <QHBoxLayout>
 
-#include "uitrackactionpanel.h";
+#include "uitrackactionpanel.h"
 #include "uitrackmidipanel.h"
 
-#include "../controllers/track.h";
+#include "../controllers/track.h"
 
 class UITrackFrame : public QFrame {
     Q_OBJECT
