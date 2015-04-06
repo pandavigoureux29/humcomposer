@@ -8,6 +8,7 @@ MidiPlayer::MidiPlayer(MainController * _mainCtrl)
 }
 
 void MidiPlayer::play(std::string _path){
+#if defined(Q_OS_WIN) || defined(Q_OS_LINUX) || defined(Q_OS_HAIKU)
     QString filename = QDir::currentPath()+"/"+ QString::fromStdString(_path);
     QString midiOutName = "";
     m_midiFile = new QMidiFile();
@@ -20,6 +21,7 @@ void MidiPlayer::play(std::string _path){
     //MidiPlayer* p = new MidiPlayer(midi_file,midi_out);
     //QObject::connect(this,SIGNAL(finished()),&a,SLOT(quit()));
     this->start();
+#endif // defined(Q_OS_WIN) || defined(Q_OS_LINUX) || defined(Q_OS_HAIKU)
 }
 
 void MidiPlayer::stop(){
@@ -27,6 +29,7 @@ void MidiPlayer::stop(){
 }
 
 void MidiPlayer::run(){
+#if defined(Q_OS_WIN) || defined(Q_OS_LINUX) || defined(Q_OS_HAIKU)
     QElapsedTimer t;
     t.start();
     QList<QMidiEvent*>* events = m_midiFile->events();
@@ -46,9 +49,11 @@ void MidiPlayer::run(){
     }
 
     m_midiOut->disconnect();
+#endif // defined(Q_OS_WIN) || defined(Q_OS_LINUX) || defined(Q_OS_HAIKU)
 }
 
 void MidiPlayer::handleEvent(){
+#if defined(Q_OS_WIN) || defined(Q_OS_LINUX) || defined(Q_OS_HAIKU)
     if (m_midiFileEvent->type() == QMidiEvent::SysEx)
     { // TODO: sysex
     }
@@ -57,6 +62,7 @@ void MidiPlayer::handleEvent(){
         qint32 message = m_midiFileEvent->message();
         m_midiOut->sendMsg(message);
     }
+#endif // defined(Q_OS_WIN) || defined(Q_OS_LINUX) || defined(Q_OS_HAIKU)
 }
 
 MidiPlayer::~MidiPlayer()

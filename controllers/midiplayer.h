@@ -6,12 +6,16 @@
 #include <QElapsedTimer>
 #include <QCoreApplication>
 #include <QApplication>
-#include "QMidi/QMidiOut.h"
-#include "QMidi/QMidiFile.h"
+
 #include <iostream>
 #include <QDebug>
 #include <QMainWindow>
 #include <QThread>
+
+#if defined(Q_OS_WIN) || defined(Q_OS_LINUX) || defined(Q_OS_HAIKU)
+#include "QMidi/QMidiOut.h"
+#include "QMidi/QMidiFile.h"
+#endif // defined(Q_OS_WIN) || defined(Q_OS_LINUX) || defined(Q_OS_HAIKU)
 
 class MainController;
 
@@ -27,9 +31,11 @@ public:
 private:
     MainController * m_mainController;
 
+#if defined(Q_OS_WIN) || defined(Q_OS_LINUX) || defined(Q_OS_HAIKU)
     QMidiEvent* m_midiFileEvent;
     QMidiFile* m_midiFile;
     QMidiOut* m_midiOut;
+#endif // defined(Q_OS_WIN) || defined(Q_OS_LINUX) || defined(Q_OS_HAIKU)
 
 protected:
     void run();

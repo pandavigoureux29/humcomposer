@@ -115,7 +115,7 @@ int MidiComposer::writeFile(std::string _filePath){
         cerr << "\nError opening file " << outfile_name << endl;
     }
 
-    //return return_code;
+    return return_code;
 }
 
 
@@ -124,7 +124,7 @@ void MidiComposer::buildMidiFromData(std::vector<NoteData> * _notesData, int _to
     initTracks();
     NoteData * note;
     int time = 0;
-    for( int i=0; i < _notesData->size(); i++){
+    for( size_t i=0; i < _notesData->size(); i++){
         note = &_notesData->at(i);
         //if the next note begins after a delay from the current time
         if( note->begin > time){

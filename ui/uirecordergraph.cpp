@@ -82,7 +82,7 @@ void UIRecorderGraph::onRecordingProcess(std::vector<short int> * _samples){
     int totalSampleBuffer = _samples->size();
 
     QVector<double> x(newSampleSize+1), y(newSampleSize+1);
-    for (int i= m_currentSampleIndex; i < _samples->size(); i ++)
+    for (size_t i= m_currentSampleIndex; i < _samples->size(); i ++)
     {
       int index = i - m_currentSampleIndex;
       if( index < x.size() ){

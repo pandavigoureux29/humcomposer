@@ -246,7 +246,7 @@ std::vector<short int> * AudioAnalyser::killNoiseInSamples(std::vector<short> * 
     if(_samples->size() <= 0)
         return result;
 
-    int index = 0; //current index in the input samples
+    size_t index = 0; //current index in the input samples
     int curSampleCount = 0; //count in the sample window process
     fvec_t *input = new_fvec (m_hopSize); // input buffer
 
@@ -256,7 +256,7 @@ std::vector<short int> * AudioAnalyser::killNoiseInSamples(std::vector<short> * 
             //compute average db level of the sample
             smpl_t db = aubio_level_detection(input,0);
             //if db not sufficient, push zeros
-            for(int i=index-m_hopSize; i < index; i++ ){
+            for(size_t i=index-m_hopSize; i < index; i++ ){
                 if( db < _noiseThreshold || i >= _samples->size()){
                     result->push_back(0);
                 }else{

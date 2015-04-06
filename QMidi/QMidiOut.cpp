@@ -50,6 +50,10 @@
         BMidiConsumer* midiOutConsumer;
         BMidiLocalProducer* midiOutLocProd;
     };
+#else
+    struct MidiPtrObjs {
+        void* ptr;
+    };
 #endif
 
 // TODO: error reporting

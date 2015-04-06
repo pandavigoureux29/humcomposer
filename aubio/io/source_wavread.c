@@ -222,7 +222,7 @@ aubio_source_wavread_t * new_aubio_source_wavread(char_t * path, uint_t samplera
 #else // mingw does not know about %zd...
     AUBIO_ERR("source_wavread: short read (%d instead of %d) in %s\n",
 #endif
-        bytes_read, bytes_expected, s->path);
+        (unsigned long) bytes_read, (unsigned long) bytes_expected, s->path);
     goto beach;
   }
   s->seek_start = bytes_read;
