@@ -124,6 +124,7 @@ void MidiComposer::buildMidiFromData(std::vector<NoteData> * _notesData, int _to
     initTracks();
     NoteData * note;
     int time = 0;
+
     for( size_t i=0; i < _notesData->size(); i++){
         note = &_notesData->at(i);
         //if the next note begins after a delay from the current time

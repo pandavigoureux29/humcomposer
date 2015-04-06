@@ -189,7 +189,7 @@ void UIRecorder::killNoise(){
     std::vector<short int> * newSamples = m_mainController->getAudioAnalyser()->killNoiseInSamples(&m_samples,m_noiseSpBox->value());
 
     //Copy new samples
-    for(int i=0; i < newSamples->size(); i++){
+    for(size_t i=0; i < newSamples->size(); i++){
         if( i >= m_samples.size())
             break;
         m_samples.at(i) = newSamples->at(i);

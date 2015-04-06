@@ -75,7 +75,7 @@ void AudioAnalyser::findNotes(std::vector<short int> * _audio){
     fvec_t *input = new_fvec (m_hopSize); // input buffer
 
     //index of the current signal value
-    int index = 0;
+    size_t index = 0;
     //Length counter of the current sample
     int curSampleCount = 0;
 
