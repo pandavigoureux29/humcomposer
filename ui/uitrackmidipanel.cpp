@@ -1,6 +1,8 @@
 #include "uitrackmidipanel.h"
 #include "uitrackframe.h"
 
+#include <sstream>
+
 UITrackMidiPanel::UITrackMidiPanel(UITrackFrame * _uitrackframe): QFrame(0)
 {
     m_trackFrame = _uitrackframe;
@@ -61,7 +63,11 @@ void UITrackMidiPanel::drawRuler(){
     for(int i=0; i < 30; i++){
         timeLabel = new QLabel(m_content);
         timeLabel->setAlignment(Qt::AlignCenter);
-        std::string s = std::to_string(i);
+
+        std::ostringstream convert;
+        convert << i;
+        std::string s = convert.str();
+
         timeLabel->setText(QString::fromStdString(s));
         timeLabel->move(i * m_pixelPerSecUnit,0);
     }

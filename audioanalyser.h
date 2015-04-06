@@ -5,12 +5,10 @@
 #include <QPushButton>
 #include <QDebug>
 #include <QDir>
-#include <math.h>
 #include <map>
 
 #include "notedata.h"
 #include "aubio/aubio.h"
-
 
 class MainController;
 
