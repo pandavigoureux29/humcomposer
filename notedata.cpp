@@ -7,7 +7,7 @@ NoteData::NoteData(){
     m_sampleRate = 44100;
 }
 
-NoteData::length(){
+int NoteData::length(){
     return end-begin;
 }
 

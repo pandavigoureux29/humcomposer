@@ -4,7 +4,7 @@
 #include <CoreFoundation/CoreFoundation.h>
 // ExtAudioFileRef, AudioStreamBasicDescription, AudioBufferList, ...
 #include <AudioToolbox/AudioToolbox.h>
-#include "aubio_priv.h"
+#include "aubio/aubio_priv.h"
 
 int createAubioBufferList(AudioBufferList *bufferList, int channels, int segmentSize);
 void freeAudioBufferList(AudioBufferList *bufferList);

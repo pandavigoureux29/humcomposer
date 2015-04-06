@@ -1,6 +1,8 @@
 #include "audioanalyser.h"
 #include "controllers/maincontroller.h"
 
+#include <cmath>
+
 AudioAnalyser::AudioAnalyser(MainController * _mainCtrl)
 {
     m_mainController = _mainCtrl;
@@ -124,7 +126,9 @@ void AudioAnalyser::findNotes(std::vector<short int> * _audio){
                 }
 
                 //note count for this frame
-                std::string noteS = std::to_string(newNote);
+                std::ostringstream convert;
+                convert << newNote;
+                std::string noteS = convert.str();
                 if( (*m_notesBufferCount)[noteS] == 0)
                     (*m_notesBufferCount)[noteS] = 1;
                 else
@@ -199,7 +203,9 @@ bool AudioAnalyser::shiftCheck(int _newNote,int _index){
             shifted = (tempBestNote != currentBestNote);
         }else{
             //note count for this frame
-            std::string noteS = std::to_string(_newNote);
+            std::ostringstream convert;
+            convert << _newNote;
+            std::string noteS = convert.str();
             if( (*m_shiftCheckBuffer)[noteS] == 0)
                 (*m_shiftCheckBuffer)[noteS] = 1;
             else
@@ -267,7 +273,7 @@ int AudioAnalyser::findMaxAbs(fvec_t * _vec, int _length){
     float f = 0; float max = 0;
     while(i < _length){
         f = _vec->data[i];
-        f = abs(f);
+        f = std::abs(f);
         if( f > max ){
             max = f;
             maxIndex = 0;
