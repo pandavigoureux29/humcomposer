@@ -16,12 +16,16 @@ public:
     void setNotes(std::vector<NoteData> * notes);
     std::vector<NoteData> * getNotes();
 
+    QString getTrackName();
+
 private:
     unsigned int m_id;
     TracksManager * m_manager;
     bool m_mute;
 
     std::vector<NoteData> * m_notes;
+
+    QString m_trackName;
 
 };
 

@@ -1,5 +1,6 @@
 #include "midicomposer.h"
 #include "controllers/maincontroller.h"
+#include "controllers/track.h"
 
 MidiComposer::MidiComposer(MainController * _mainCtrl)
 {
@@ -86,11 +87,23 @@ void MidiComposer::pushSilence(int _track,int _duration){
     m_tracks->GetTrack( _track )->PutEvent( *m_message );
 }
 
-int MidiComposer::writeFile(std::string _filePath){
-
+int MidiComposer::writeFile(QString _filePath){
+    //Check project folder
+    if( ! QDir(m_mainController->getProjectFolder()).exists() ){
+        QDir().mkdir(m_mainController->getProjectFolder());
+    }
+    //Build path name
+    QString fullPath = m_mainController->getDefaultFolder();
+    fullPath += "/tracks";
+    //check and/or create tracks folder
+    if( ! QDir( fullPath ).exists() ){
+        QDir().mkdir(fullPath);
+    }
+    fullPath += "/"+_filePath+".mid";
+    qDebug() << fullPath;
     int return_code = 0;
     // to write the multi track object out, we need to create an output stream for the output filename
-    const char *outfile_name = _filePath.c_str();
+    const char *outfile_name = fullPath.toStdString().c_str();
     MIDIFileWriteStreamFileName out_stream( outfile_name );
 
     // then output the stream like my example does, except setting m_tracksCount to match your data
@@ -119,14 +132,14 @@ int MidiComposer::writeFile(std::string _filePath){
 }
 
 
-void MidiComposer::buildMidiFromData(std::vector<NoteData> * _notesData, int _totalAudioSize){
+void MidiComposer::buildMidiTrackFromData(Track * _track, int _totalAudioSize){
     qDebug() << "BUILDING";
     initTracks();
     NoteData * note;
     int time = 0;
 
-    for( size_t i=0; i < _notesData->size(); i++){
-        note = &_notesData->at(i);
+    for( size_t i=0; i < _track->getNotes()->size(); i++){
+        note = & _track->getNotes()->at(i);
         //if the next note begins after a delay from the current time
         if( note->begin > time){
             //add silence
@@ -148,7 +161,7 @@ void MidiComposer::buildMidiFromData(std::vector<NoteData> * _notesData, int _to
         pushSilence(1,(int)silenceDuration);
         qDebug() << "silence dur: " << silenceDuration ;
     }
-    writeFile("compo.mid");
+    writeFile(_track->getTrackName());
 }
 
 MidiComposer::~MidiComposer()

@@ -10,20 +10,21 @@
 #include <QPushButton>
 #include <QHBoxLayout>
 
-#include "ui/uirecorder.h"
+class UITrackFrame;
 
 class UITrackActionPanel: public QFrame{
     Q_OBJECT
 
     public:
-        UITrackActionPanel(QWidget *parent = 0);
+        UITrackActionPanel(UITrackFrame * frame);
         ~UITrackActionPanel();
 
     public slots:
-        void record();
+        void play();
         void stop();
 
     private:
+        UITrackFrame * m_trackFrame;
         QLabel * m_title;
 };
 

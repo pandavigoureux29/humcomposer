@@ -39,7 +39,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 void MainWindow::addTrack(Track * _track){
     qDebug() << "Adding ui track" << (_track!=NULL);
     //create a track
-    UITrackFrame * uiTrackFrame = new UITrackFrame(_track);
+    UITrackFrame * uiTrackFrame = new UITrackFrame(_track,m_mainController);
     m_tracksLayout->addWidget(uiTrackFrame);
     m_tracks.push_back(uiTrackFrame);
     uiTrackFrame->show();

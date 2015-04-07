@@ -18,6 +18,7 @@
 #endif // defined(Q_OS_WIN) || defined(Q_OS_LINUX) || defined(Q_OS_HAIKU)
 
 class MainController;
+class Track;
 
 class MidiPlayer : public QThread
 {
@@ -25,7 +26,8 @@ class MidiPlayer : public QThread
 public:
     MidiPlayer(MainController * mainCtrl);
     ~MidiPlayer();
-    void play(std::string path);
+    void play(QString path);
+    void playTrack(Track * _track);
     void stop();
 
 private:

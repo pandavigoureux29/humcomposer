@@ -1,8 +1,9 @@
 #include "uitrackactionpanel.h"
+#include "ui/uitrackframe.h"
 
-UITrackActionPanel::UITrackActionPanel(QWidget * parent) : QFrame(parent)
+UITrackActionPanel::UITrackActionPanel(UITrackFrame * _frame) : QFrame(0)
 {
-
+    m_trackFrame = _frame;
     //UI
     //Vertical Layout holding title & audio buttons
     QVBoxLayout * vLayout = new QVBoxLayout();
@@ -17,8 +18,8 @@ UITrackActionPanel::UITrackActionPanel(QWidget * parent) : QFrame(parent)
     QWidget * m_audioWidget = new QWidget();
     QHBoxLayout * hLayout = new QHBoxLayout();
 
-    QPushButton * recordButton = new QPushButton(">O");
-    QObject::connect(recordButton, SIGNAL(clicked()), this, SLOT(record())) ;
+    QPushButton * recordButton = new QPushButton(">");
+    QObject::connect(recordButton, SIGNAL(clicked()), this, SLOT(play())) ;
 
     QPushButton * stopButton = new QPushButton("[]");
     QObject::connect(stopButton, SIGNAL(clicked()), this, SLOT(stop())) ;
@@ -38,8 +39,8 @@ UITrackActionPanel::UITrackActionPanel(QWidget * parent) : QFrame(parent)
     this->adjustSize();
 }
 
-void UITrackActionPanel::record(){
-    qDebug() << "RECORD";
+void UITrackActionPanel::play(){
+    m_trackFrame->playMidi();
 }
 
 void UITrackActionPanel::stop(){

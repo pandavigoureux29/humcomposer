@@ -18,6 +18,7 @@
 
 
 class MainController;
+class Track;
 
 using namespace jdksmidi;
 
@@ -33,12 +34,8 @@ public:
     ~MidiComposer();
 
 public:
-    void initTracks();
-    int writeFile(std::string filePath);
     void setTrackInstrument(int,int);
-    void pushNote(int note, int track, int durationMs);
-    void pushSilence(int track,int duration);
-    void buildMidiFromData(std::vector<NoteData> * _notesData, int _totalAudioSize);
+    void buildMidiTrackFromData(Track * _track, int _totalAudioSize);
 
 private :
     MainController * m_mainController;
@@ -46,7 +43,12 @@ private :
     MIDIMultiTrack *m_tracks;
     int m_tracksCount = 2;
     MIDIClockTime m_time;
-    MIDIClockTime m_dt;
+    MIDIClockTime m_dt;    
+
+    void initTracks();
+    void pushNote(int note, int track, int durationMs);
+    void pushSilence(int track,int duration);
+    int writeFile(QString filePath);
 };
 
 #endif // MIDICOMPOSER_H

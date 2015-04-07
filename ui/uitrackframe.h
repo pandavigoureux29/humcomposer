@@ -13,11 +13,13 @@
 
 #include "../controllers/track.h"
 
+class MainController;
+
 class UITrackFrame : public QFrame {
     Q_OBJECT
 
     public:
-        UITrackFrame(Track * _track);
+        UITrackFrame(Track * _track,MainController * mainController);
         ~UITrackFrame();
         void refresh();
 
@@ -31,6 +33,7 @@ class UITrackFrame : public QFrame {
         UITrackMidiPanel * m_uiMidiPanel;
 
         Track * m_track;
+        MainController * m_mainController;
 
 };
 

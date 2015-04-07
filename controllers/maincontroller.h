@@ -19,6 +19,8 @@ public:
     void playMidi();
     void stopMidi();
 
+    void playTrack(Track * _track);
+
     //callbacks
     void onMainWindowReady();
     void onSoundAnalyseComplete();
@@ -27,6 +29,8 @@ public:
 
     //getters
     AudioAnalyser * getAudioAnalyser();
+    QString getDefaultFolder();
+    QString getProjectFolder();
 
 private :
     MainWindow * m_mainWindow;
@@ -35,6 +39,10 @@ private :
     MidiComposer * m_midiComposer;
     TracksManager * m_tracksManager;
     MidiPlayer * m_midiPlayer;
+
+    //project
+    QString m_defaultFolder;
+    QString m_projectFolder;
 };
 
 #endif // MAINCONTROLLER_H

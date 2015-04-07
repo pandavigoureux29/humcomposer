@@ -6,6 +6,7 @@ Track::Track(unsigned int _id, TracksManager * _trackManager)
     m_id = _id;
     m_manager = _trackManager;
     m_notes = new std::vector<NoteData>();
+    m_trackName = "track_"+m_id;
 }
 
 void Track::setNotes(std::vector<NoteData> * _notes){
@@ -17,6 +18,10 @@ void Track::setNotes(std::vector<NoteData> * _notes){
 
 std::vector<NoteData> * Track::getNotes(){
     return m_notes;
+}
+
+QString Track::getTrackName(){
+    return m_trackName;
 }
 
 Track::~Track()

@@ -1,5 +1,6 @@
 #include "midiplayer.h"
 #include "maincontroller.h"
+#include "controllers/track.h"
 #include <QDebug>
 
 MidiPlayer::MidiPlayer(MainController * _mainCtrl)
@@ -7,9 +8,10 @@ MidiPlayer::MidiPlayer(MainController * _mainCtrl)
     m_mainController = _mainCtrl;
 }
 
-void MidiPlayer::play(std::string _path){
+void MidiPlayer::play(QString _path){
 #if defined(Q_OS_WIN) || defined(Q_OS_LINUX) || defined(Q_OS_HAIKU)
-    QString filename = QDir::currentPath()+"/"+ QString::fromStdString(_path);
+    QString filename = QDir::currentPath()+"/"+ _path;
+    qDebug() << filename;
     QString midiOutName = "";
     m_midiFile = new QMidiFile();
 
@@ -17,11 +19,17 @@ void MidiPlayer::play(std::string _path){
 
     m_midiOut = new QMidiOut();
     bool connectRes = m_midiOut->connect(midiOutName);
-    qDebug() << connectRes;
+
     //MidiPlayer* p = new MidiPlayer(midi_file,midi_out);
     //QObject::connect(this,SIGNAL(finished()),&a,SLOT(quit()));
     this->start();
 #endif // defined(Q_OS_WIN) || defined(Q_OS_LINUX) || defined(Q_OS_HAIKU)
+}
+
+void MidiPlayer::playTrack( Track * _track) {
+    QString fullPath = m_mainController->getProjectFolder();
+    fullPath += "/tracks/"+_track->getTrackName()+".mid";
+    play(fullPath);
 }
 
 void MidiPlayer::stop(){
