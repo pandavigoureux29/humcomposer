@@ -14,7 +14,7 @@ AudioAnalyser::AudioAnalyser(MainController * _mainCtrl)
     m_hopSize = m_winSize / 4; // hop size
     m_samplerate = 44100; // samplerate
 
-    m_noiseThreshold = 10;
+    m_noiseThreshold = 50;
     m_minBestNoteCount = 10;
 
     //create pitch object

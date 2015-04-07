@@ -88,6 +88,7 @@ UIRecorder::UIRecorder(MainController * _mc) : QFrame(0)
 void UIRecorder::record(){
     qDebug() << "RECORD";
 
+    m_samples.clear();
     m_inputIODevice = m_audioInput->start();
     connect(m_inputIODevice, SIGNAL(readyRead()), this,SLOT(readMore()));
 

@@ -35,7 +35,7 @@ UIRecorderGraph::UIRecorderGraph() : QFrame(0)
 }
 
 void UIRecorderGraph::buildGraphFromBuffer(std::vector<short int> * _samples){
-
+    qDebug() << "buildGraphFromBuffer";
     int totalSampleBuffer = _samples->size();
 
     QVector<double> x(totalSampleBuffer+1), y(totalSampleBuffer+1);
@@ -66,6 +66,7 @@ void UIRecorderGraph::buildGraphFromBuffer(std::vector<short int> * _samples){
 
 void UIRecorderGraph::onRecordingStart(){
     m_currentSampleIndex = 0;
+    m_plot->graph(0)->clearData();
 }
 
 void UIRecorderGraph::onRecordingProcess(std::vector<short int> * _samples){
@@ -99,7 +100,6 @@ void UIRecorderGraph::onRecordingProcess(std::vector<short int> * _samples){
         m_plot->xAxis->setRange(maxCurrentX - m_xPlotRange, m_xPlotRange , Qt::AlignLeft);
     }
 
-    //m_plot->graph(0)->setData(x, y);
     m_plot->graph()->addData(x,y);
     m_plot->replot();
 

@@ -25,11 +25,13 @@ UINote::UINote(QWidget * parent) : QFrame(parent)
     m_upButton->setMaximumWidth(20);
     m_upButton->setMaximumHeight(20);
     m_upButton->show();
+    QObject::connect(m_upButton, SIGNAL(clicked()), this, SLOT(onUp())) ;
 
     m_downButton = new QPushButton();
     m_downButton->setMaximumWidth(20);
     m_downButton->setMaximumHeight(20);
     m_downButton->show();
+    QObject::connect(m_downButton, SIGNAL(clicked()), this, SLOT(onDown())) ;
 
     btnLayout->addWidget(m_upButton);
     btnLayout->addWidget(m_downButton);
