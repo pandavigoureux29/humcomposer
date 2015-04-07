@@ -42,16 +42,18 @@ UINote::UINote(QWidget * parent) : QFrame(parent)
 }
 
 void UINote::setUp(NoteData * _noteData){
-    /*m_noteData = _noteData;
-    m_labelNote->setText( QString::fromStdString( std::to_string(_noteData->note) ) );*/
+    m_noteData = _noteData;
+    m_labelNote->setText( QString::fromStdString( std::to_string(_noteData->note) ) );
 }
 
 void UINote::onUp(){
-
+    m_noteData->note ++;
+    m_labelNote->setText( QString::fromStdString( std::to_string(m_noteData->note) ) );
 }
 
-void UINote::onDown(){
-
+void UINote::onDown(){    
+    m_noteData->note --;
+    m_labelNote->setText( QString::fromStdString( std::to_string(m_noteData->note) ) );
 }
 
 UINote::~UINote()

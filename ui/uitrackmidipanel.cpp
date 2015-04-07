@@ -14,11 +14,6 @@ UITrackMidiPanel::UITrackMidiPanel(UITrackFrame * _uitrackframe): QFrame(0)
     m_content = new QWidget();
     m_content->setMinimumHeight(100);
 
-    UINote * noteUI = new UINote(m_content);
-    noteUI->move(10,30);
-    noteUI->show();
-
-
     m_scrollArea->setWidget(m_content);
     m_scrollArea->adjustSize();
 
@@ -39,12 +34,9 @@ void UITrackMidiPanel::buildTrack(){
 }
 
 void UITrackMidiPanel::refresh(){
-    qDebug() << "refresh" << (m_trackFrame->getTrack()!=NULL);
-    UINote * un = new UINote();
-    m_uiNotes->push_back(un);
+    qDebug() << "refresh" << (m_trackFrame->getTrack()->getNotes()->size());
 
     for( int i =0; i < m_trackFrame->getTrack()->getNotes()->size(); i++){
-    //for(int i=0 ; i < 1; i++){
         NoteData * noteData = & m_trackFrame->getTrack()->getNotes()->at(i);
         UINote * uinote = new UINote(m_content);
         m_uiNotes->push_back(uinote);

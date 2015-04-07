@@ -21,7 +21,7 @@ public:
     /**
      * Proccess buffers samples and create notes data
      */
-    std::vector<NoteData> * processSound(std::vector<short int> * samples);
+    std::vector<NoteData> * processSound(const std::vector<short int> * samples);
     int getTotalSize();
     void setNoiseThreshold(int value);
     int getNoiseThreshold();
@@ -44,7 +44,7 @@ private:
     /**
      * Find notes in the audio sample provided
      */
-    void findNotes(std::vector<short int> * audio);
+    void findNotes(const std::vector<short int> * audio);
     bool shiftCheck(int newNote,int _index);
 
     void processAllNotes(std::vector<int> * allNotes);

@@ -31,7 +31,7 @@ AudioAnalyser::AudioAnalyser(MainController * _mainCtrl)
 }
 
 
-std::vector<NoteData> * AudioAnalyser::processSound(std::vector<short int> * _samples){
+std::vector<NoteData> * AudioAnalyser::processSound(const std::vector<short int> * _samples){
     //m_notes->clear();
 
     qDebug() << m_noiseThreshold;
@@ -67,12 +67,12 @@ int AudioAnalyser::computeNote(fvec_t * _frameSample){
 /**
  * Procss the entitre audio sample to find notes
  */
-void AudioAnalyser::findNotes(std::vector<short int> * _audio){
+void AudioAnalyser::findNotes(const std::vector<short int> * _audio){
 
     m_notes->clear();
     m_notesBufferCount->clear();
     // create a vector to hold each frame sample of m_hopSize length
-    fvec_t *input = new_fvec (m_hopSize); // input buffer
+    fvec_t *input = new_fvec (m_hopSize+1); // input buffer
 
     //index of the current signal value
     size_t index = 0;
@@ -86,7 +86,8 @@ void AudioAnalyser::findNotes(std::vector<short int> * _audio){
         curSampleCount++;
         index++;
         //store a frame of m_hopSize length as input
-        input->data[curSampleCount] = _audio->at(index);
+        smpl_t audioValue = _audio->at(index);
+        input->data[curSampleCount] = audioValue;
         //when we have filled the input data
         if( curSampleCount >= (int) m_hopSize ){
             curSampleCount =0;
@@ -145,7 +146,7 @@ void AudioAnalyser::findNotes(std::vector<short int> * _audio){
                     //reset curNote
                     curNote->begin = -1;
                 }
-            }
+            }//end if db > threshold
         }
     }
 

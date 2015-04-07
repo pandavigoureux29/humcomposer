@@ -24,6 +24,7 @@ void UITrackFrame::playMidi(){
     qDebug() << "playTrack";
 }
 
+//Called by MainWindow
 void UITrackFrame::refresh(){
     m_uiMidiPanel->refresh();
 }
